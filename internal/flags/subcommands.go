@@ -5,11 +5,14 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/superNWHG/doman/internal/data"
 )
 
 func SetSubcommands() error {
 	newRepoCmd := flag.NewFlagSet("new", flag.ExitOnError)
 	newRepoClone := newRepoCmd.Bool("clone", false, "Set to true to clone a repo instead of initializing a new one")
+	newRepoDataFile := newRepoCmd.Bool("datafile", true, "Set to false if you don't wat to create a data file to keep track of your dotfiles")
 	newRepoPath := newRepoCmd.String("path", "./", "Path to the new repo")
 	newRepoUrl := newRepoCmd.String("url", "", "URL of the repo")
 
@@ -32,6 +35,12 @@ func SetSubcommands() error {
 			}
 		} else {
 			if err := newInitRepo(*newRepoPath, *newRepoUrl); err != nil {
+				return err
+			}
+		}
+
+		if *newRepoDataFile {
+			if err := data.NewDataFile(*newRepoPath); err != nil {
 				return err
 			}
 		}
