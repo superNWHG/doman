@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func setSubcommands() error {
+func SetSubcommands() error {
 	newRepoCmd := flag.NewFlagSet("new", flag.ExitOnError)
 	newRepoClone := newRepoCmd.Bool("clone", false, "Set to true to clone a repo instead of initializing a new one")
 	newRepoPath := newRepoCmd.String("path", "./", "Path to the new repo")
