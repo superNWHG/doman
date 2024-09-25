@@ -1,0 +1,2 @@
+# doman
+Dotfiles manager
