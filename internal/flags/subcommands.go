@@ -3,6 +3,7 @@ package flags
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"os"
 )
 
@@ -20,6 +21,7 @@ func SetSubcommands() error {
 	switch os.Args[1] {
 	case "new":
 		err := newRepoCmd.Parse(os.Args[2:])
+		fmt.Println(string(*newRepoPath))
 		if err != nil {
 			return err
 		}
@@ -33,6 +35,7 @@ func SetSubcommands() error {
 				return err
 			}
 		}
+		return nil
 	}
 
 	err := errors.New("Invalid subcommand")
