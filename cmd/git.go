@@ -35,3 +35,42 @@ func InitRepo(path string, url string) error {
 
 	return nil
 }
+
+func Add(path string, files []string) error {
+	repo, err := git.PlainOpen(path)
+	if err != nil {
+		return err
+	}
+
+	workTree, err := repo.Worktree()
+	if err != nil {
+		return err
+	}
+
+	for i := range files {
+		_, err := workTree.Add(files[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func Commit(path string, commitMessage string) error {
+	repo, err := git.PlainOpen(path)
+	if err != nil {
+		return err
+	}
+
+	workTree, err := repo.Worktree()
+	if err != nil {
+		return err
+	}
+	_, err = workTree.Commit(commitMessage, &git.CommitOptions{})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
