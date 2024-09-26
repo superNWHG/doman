@@ -1,6 +1,7 @@
 package data
 
 import (
+	"encoding/json"
 	"errors"
 	"os"
 )
@@ -21,6 +22,40 @@ func NewDataFile(path string) error {
 	}
 
 	return nil
+}
+
+func ReadDataFile(path string) (error, []string, []string, map[string]interface{}) {
+	path = checkForSlash(path)
+
+	file, err := os.ReadFile(path)
+	if err != nil {
+		return err, nil, nil, nil
+	}
+
+	err, obj := decodeJson(file)
+	if err != nil {
+		return err, nil, nil, nil
+	}
+
+	keys := []string{}
+	values := []string{}
+
+	for key, rawMsg := range obj {
+		var value string
+		if err := json.Unmarshal(*rawMsg, &value); err != nil {
+			return err, nil, nil, nil
+		}
+
+		keys = append(keys, key)
+		values = append(values, value)
+	}
+
+	combined := make(map[string]interface{})
+	for i := range keys {
+		combined[keys[i]] = values[i]
+	}
+
+	return nil, keys, values, combined
 }
 
 func checkForSlash(slashString string) string {
