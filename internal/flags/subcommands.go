@@ -23,6 +23,9 @@ func SetSubcommands() error {
 	addName := addCmd.String("name", "", "Name of the dotfile entry")
 	addEntry := addCmd.String("entry", "", "Path to the new dotfile entry")
 
+	readCmd := flag.NewFlagSet("read", flag.ExitOnError)
+	readPath := readCmd.String("path", "./", "Path to the repo")
+
 	if len(os.Args) < 2 {
 		err := errors.New("Expected subcommand")
 		return err
@@ -64,6 +67,17 @@ func SetSubcommands() error {
 			return err
 		}
 		if err := addData(*addPath, *addName, *addEntry); err != nil {
+			return err
+		}
+
+		return nil
+
+	case "read":
+		if err := readCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+
+		if err := readData(*readPath); err != nil {
 			return err
 		}
 
