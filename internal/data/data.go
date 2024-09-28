@@ -75,7 +75,9 @@ func NewData(path string, newDataKeys []string, newDataValues []string) error {
 		return err
 	}
 
-	os.WriteFile(path, data, 0644)
+	if err = os.WriteFile(path, data, 0644); err != nil {
+		return err
+	}
 
 	return nil
 }
