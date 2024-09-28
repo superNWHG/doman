@@ -26,6 +26,11 @@ func SetSubcommands() error {
 	readCmd := flag.NewFlagSet("read", flag.ExitOnError)
 	readPath := readCmd.String("path", "./", "Path to the repo")
 
+	syncCmd := flag.NewFlagSet("sync", flag.ExitOnError)
+	syncPath := syncCmd.String("path", "./", "Path to the repo")
+	syncMessage := syncCmd.String("message", "New changes", "Custom commit message")
+	syncPush := syncCmd.Bool("push", false, "Set to true to automatically push to the remote repository")
+
 	if len(os.Args) < 2 {
 		err := errors.New("Expected subcommand")
 		return err
@@ -78,6 +83,17 @@ func SetSubcommands() error {
 		}
 
 		if err := readData(*readPath); err != nil {
+			return err
+		}
+
+		return nil
+
+	case "sync":
+		if err := syncCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+
+		if err := data.Sync(*syncPath, *syncMessage, *syncPush); err != nil {
 			return err
 		}
 
