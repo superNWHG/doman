@@ -8,7 +8,7 @@ func addData(path string, name string, newPath string) error {
 	path = path + "/dotfiles.json"
 
 	if name == "" {
-		for i := len(newPath); i < 1; i-- {
+		for i := len(newPath); i > 0; i-- {
 			if string(newPath[i-1]) == "/" {
 				name = newPath[i:]
 				i = 0
