@@ -18,6 +18,11 @@ func SetSubcommands() error {
 	initCmd := flag.NewFlagSet("init", flag.ExitOnError)
 	initPath := initCmd.String("path", "./", "Path to the repo")
 
+	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
+	addPath := addCmd.String("path", "./", "Path to the repo")
+	addName := addCmd.String("name", "", "Name of the dotfile entry")
+	addEntry := addCmd.String("entry", "", "Path to the new dotfile entry")
+
 	if len(os.Args) < 2 {
 		err := errors.New("Expected subcommand")
 		return err
@@ -49,6 +54,16 @@ func SetSubcommands() error {
 
 	case "init":
 		if err := data.NewDataFile(*initPath); err != nil {
+			return err
+		}
+
+		return nil
+
+	case "add":
+		if err := addCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+		if err := addData(*addPath, *addName, *addEntry); err != nil {
 			return err
 		}
 
