@@ -74,3 +74,16 @@ func Commit(path string, commitMessage string) error {
 
 	return nil
 }
+
+func Push(path string) error {
+	repo, err := git.PlainOpen(path)
+	if err != nil {
+		return err
+	}
+
+	if err := repo.Push(&git.PushOptions{}); err != nil {
+		return err
+	}
+
+	return nil
+}
