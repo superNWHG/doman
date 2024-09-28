@@ -2,7 +2,10 @@ module github.com/superNWHG/doman
 
 go 1.23.1
 
-require github.com/go-git/go-git/v5 v5.12.0
+require (
+	github.com/go-git/go-git/v5 v5.12.0
+	golang.org/x/term v0.18.0
+)
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
