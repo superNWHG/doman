@@ -8,11 +8,10 @@ func addData(path string, name string, newPath string) error {
 	path = path + "/dotfiles.json"
 
 	if name == "" {
-		found := false
-		for i := len(newPath); !found; i-- {
+		for i := len(newPath); i < 1; i-- {
 			if string(newPath[i-1]) == "/" {
 				name = newPath[i:]
-				found = true
+				i = 0
 			}
 		}
 
