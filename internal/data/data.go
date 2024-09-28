@@ -21,6 +21,10 @@ func NewDataFile(path string) error {
 		return err
 	}
 
+	if err := os.WriteFile(dataFilePath, []byte("{}"), 0644); err != nil {
+		return err
+	}
+
 	return nil
 }
 
