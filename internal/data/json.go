@@ -10,3 +10,12 @@ func decodeJson(data []byte) (error, map[string]*json.RawMessage) {
 
 	return nil, obj
 }
+
+func encodeJson(data map[string]interface{}) (error, []byte) {
+	jsonString, err := json.Marshal(data)
+	if err != nil {
+		return err, nil
+	}
+
+	return nil, jsonString
+}

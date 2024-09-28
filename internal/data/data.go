@@ -58,6 +58,28 @@ func ReadDataFile(path string) (error, []string, []string, map[string]interface{
 	return nil, keys, values, combined
 }
 
+func NewData(path string, newDataKeys []string, newDataValues []string) error {
+	path = checkForSlash(path)
+
+	err, _, _, oldData := ReadDataFile(path)
+	if err != nil {
+		return err
+	}
+
+	for i := range newDataKeys {
+		oldData[newDataKeys[i]] = newDataValues[i]
+	}
+
+	err, data := encodeJson(oldData)
+	if err != nil {
+		return err
+	}
+
+	os.WriteFile(path, data, 0644)
+
+	return nil
+}
+
 func checkForSlash(slashString string) string {
 	if slashString[len(slashString)-1:] == "/" {
 		slashString = slashString[:len(slashString)-1]
