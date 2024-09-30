@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
+	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
 )
 
 func CloneRepo(path string, url string) error {
@@ -57,7 +59,7 @@ func Add(path string, files []string) error {
 	return nil
 }
 
-func Commit(path string, commitMessage string) error {
+func Commit(path string, commitMessage string, name string, email string) error {
 	repo, err := git.PlainOpen(path)
 	if err != nil {
 		return err
@@ -67,7 +69,20 @@ func Commit(path string, commitMessage string) error {
 	if err != nil {
 		return err
 	}
-	_, err = workTree.Commit(commitMessage, &git.CommitOptions{})
+
+	if name == "" || email == "" {
+		_, err = workTree.Commit(commitMessage, &git.CommitOptions{
+			AllowEmptyCommits: false,
+			Author: &object.Signature{
+				Name:  name,
+				Email: email,
+			},
+		})
+	} else {
+		_, err = workTree.Commit(commitMessage, &git.CommitOptions{
+			AllowEmptyCommits: false,
+		})
+	}
 	if err != nil {
 		return err
 	}
@@ -75,13 +90,18 @@ func Commit(path string, commitMessage string) error {
 	return nil
 }
 
-func Push(path string) error {
+func Push(path string, name string, password string) error {
 	repo, err := git.PlainOpen(path)
 	if err != nil {
 		return err
 	}
 
-	if err := repo.Push(&git.PushOptions{}); err != nil {
+	if err := repo.Push(&git.PushOptions{
+		Auth: &http.BasicAuth{
+			Username: name,
+			Password: password,
+		},
+	}); err != nil {
 		return err
 	}
 
