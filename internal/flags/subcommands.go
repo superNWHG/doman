@@ -36,6 +36,7 @@ func SetSubcommands() error {
 	linkPath := linkCmd.String("path", "./", "Path to the repo")
 
 	if len(os.Args) < 2 {
+		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd)
 		err := errors.New("Expected subcommand")
 		return err
 	}
