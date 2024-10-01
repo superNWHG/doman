@@ -2,12 +2,13 @@ package flags
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/superNWHG/doman/internal/data"
 )
 
 func readData(path string) error {
-	path = checkForSlash(path) + "/dotfiles.json"
+	path = filepath.Join(path, "dotfiles.json")
 	values, _, entries, err := data.ReadDataFile(path)
 	if err != nil {
 		return err

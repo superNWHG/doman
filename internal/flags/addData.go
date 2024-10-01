@@ -1,13 +1,13 @@
 package flags
 
 import (
+	"path/filepath"
+
 	"github.com/superNWHG/doman/cmd"
 	"github.com/superNWHG/doman/internal/data"
 )
 
 func addData(path string, name string, newPath string) error {
-	path = checkForSlash(path)
-
 	if name == "" {
 		for i := len(newPath); i > 0; i-- {
 			if string(newPath[i-1]) == "/" {
@@ -18,9 +18,9 @@ func addData(path string, name string, newPath string) error {
 
 	}
 
-	namePath := path + "/" + name
+	namePath := filepath.Join(path, name)
 
-	path = path + "/dotfiles.json"
+	path = filepath.Join(path, "/dotfiles.json")
 
 	nameSlice := []string{name}
 	namePathSlice := []string{namePath}
@@ -35,12 +35,4 @@ func addData(path string, name string, newPath string) error {
 	}
 
 	return nil
-}
-
-func checkForSlash(slashString string) string {
-	if slashString[len(slashString)-1:] == "/" {
-		slashString = slashString[:len(slashString)-1]
-	}
-
-	return slashString
 }
