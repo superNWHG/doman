@@ -30,7 +30,7 @@ func addData(path string, name string, newPath string) error {
 		return err
 	}
 
-	if err := cmd.NewLink(newPathSlice, namePathSlice); err != nil {
+	if err := cmd.NewLink(newPathSlice, namePathSlice, "deleteOld"); err != nil {
 		return err
 	}
 

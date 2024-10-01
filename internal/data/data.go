@@ -5,6 +5,8 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+
+	"github.com/superNWHG/doman/cmd"
 )
 
 func NewDataFile(path string) error {
@@ -76,6 +78,32 @@ func NewData(path string, newDataKeys []string, newDataValues []string) error {
 	}
 
 	if err = os.WriteFile(path, data, 0644); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func LinkData(path string) error {
+	oldPaths, newPaths, _, err := ReadDataFile(path)
+	if err != nil {
+		return err
+	}
+
+	newPathsToLink := []string{}
+	oldPathsToLink := []string{}
+	for i := range newPaths {
+		info, err := os.Lstat(newPaths[i])
+		if err != nil {
+			return err
+		}
+		if info.Mode() == os.ModeSymlink {
+			newPathsToLink = append(newPathsToLink, newPaths[i])
+			oldPathsToLink = append(oldPathsToLink, oldPaths[i])
+		}
+	}
+
+	if err := cmd.NewLink(oldPathsToLink, newPathsToLink, "deleteNew"); err != nil {
 		return err
 	}
 
