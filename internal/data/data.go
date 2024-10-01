@@ -28,15 +28,15 @@ func NewDataFile(path string) error {
 	return nil
 }
 
-func ReadDataFile(path string) (error, []string, []string, map[string]interface{}) {
+func ReadDataFile(path string) ([]string, []string, map[string]interface{}, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
-		return err, nil, nil, nil
+		return nil, nil, nil, err
 	}
 
-	err, obj := decodeJson(file)
+	obj, err := decodeJson(file)
 	if err != nil {
-		return err, nil, nil, nil
+		return nil, nil, nil, err
 	}
 
 	keys := []string{}
@@ -45,7 +45,7 @@ func ReadDataFile(path string) (error, []string, []string, map[string]interface{
 	for key, rawMsg := range obj {
 		var value string
 		if err := json.Unmarshal(*rawMsg, &value); err != nil {
-			return err, nil, nil, nil
+			return nil, nil, nil, err
 		}
 
 		keys = append(keys, key)
@@ -57,11 +57,11 @@ func ReadDataFile(path string) (error, []string, []string, map[string]interface{
 		combined[keys[i]] = values[i]
 	}
 
-	return nil, keys, values, combined
+	return keys, values, combined, err
 }
 
 func NewData(path string, newDataKeys []string, newDataValues []string) error {
-	err, _, _, oldData := ReadDataFile(path)
+	_, _, oldData, err := ReadDataFile(path)
 	if err != nil {
 		return err
 	}
@@ -70,7 +70,7 @@ func NewData(path string, newDataKeys []string, newDataValues []string) error {
 		oldData[newDataKeys[i]] = newDataValues[i]
 	}
 
-	err, data := encodeJson(oldData)
+	data, err := encodeJson(oldData)
 	if err != nil {
 		return err
 	}

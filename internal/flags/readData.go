@@ -8,7 +8,7 @@ import (
 
 func readData(path string) error {
 	path = checkForSlash(path) + "/dotfiles.json"
-	err, values, _, entries := data.ReadDataFile(path)
+	values, _, entries, err := data.ReadDataFile(path)
 	if err != nil {
 		return err
 	}

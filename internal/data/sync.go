@@ -8,7 +8,7 @@ import (
 
 func Sync(path string, message string, push bool, auth bool) error {
 	dataPath := filepath.Join(path, "dotfiles.json")
-	err, files, _, _ := ReadDataFile(dataPath)
+	files, _, _, err := ReadDataFile(dataPath)
 	if err != nil {
 		return err
 	}
