@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 )
 
 func NewDataFile(path string) error {
-	path = checkForSlash(path)
 	if _, err := os.Stat(path); err != nil {
 		return err
 	}
-	dataFilePath := path + "/dotfiles.json"
+	dataFilePath := filepath.Join(path, "dotfiles.json")
 	if _, err := os.Stat(dataFilePath); err == nil {
 		err := errors.New("Data file already exists")
 		return err
@@ -29,8 +29,6 @@ func NewDataFile(path string) error {
 }
 
 func ReadDataFile(path string) (error, []string, []string, map[string]interface{}) {
-	path = checkForSlash(path)
-
 	file, err := os.ReadFile(path)
 	if err != nil {
 		return err, nil, nil, nil
@@ -63,8 +61,6 @@ func ReadDataFile(path string) (error, []string, []string, map[string]interface{
 }
 
 func NewData(path string, newDataKeys []string, newDataValues []string) error {
-	path = checkForSlash(path)
-
 	err, _, _, oldData := ReadDataFile(path)
 	if err != nil {
 		return err
@@ -84,12 +80,4 @@ func NewData(path string, newDataKeys []string, newDataValues []string) error {
 	}
 
 	return nil
-}
-
-func checkForSlash(slashString string) string {
-	if slashString[len(slashString)-1:] == "/" {
-		slashString = slashString[:len(slashString)-1]
-	}
-
-	return slashString
 }
