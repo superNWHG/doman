@@ -8,7 +8,7 @@ I would not recommend to run it as you dotfile manager, although I won't stop yo
 # Building instructions
 
 **Requirements**
-- A machine running any linux distribution (Windows will work too probably, I just never tested it)
+- A machine running any linux distribution (Windows or MacOS will work too probably, I just never tested it)
 - Go
 - Git
 
