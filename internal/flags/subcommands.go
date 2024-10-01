@@ -32,6 +32,9 @@ func SetSubcommands() error {
 	syncAuth := syncCmd.Bool("authentication", true, "Set to false to not ask for username and password")
 	syncPush := syncCmd.Bool("push", false, "Set to true to automatically push to the remote repository")
 
+	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
+	linkPath := linkCmd.String("path", "./", "Path to the repo")
+
 	if len(os.Args) < 2 {
 		err := errors.New("Expected subcommand")
 		return err
@@ -95,6 +98,17 @@ func SetSubcommands() error {
 		}
 
 		if err := data.Sync(*syncPath, *syncMessage, *syncPush, *syncAuth); err != nil {
+			return err
+		}
+
+		return nil
+
+	case "link":
+		if err := linkCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+
+		if err := data.LinkData(*linkPath); err != nil {
 			return err
 		}
 
