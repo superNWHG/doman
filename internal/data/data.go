@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/superNWHG/doman/cmd"
+	"github.com/superNWHG/doman/pkg/symlink"
 )
 
 func NewDataFile(path string) error {
@@ -103,7 +103,7 @@ func LinkData(path string) error {
 		}
 	}
 
-	if err := cmd.NewLink(oldPathsToLink, newPathsToLink, "deleteNew"); err != nil {
+	if err := symlink.NewLink(oldPathsToLink, newPathsToLink, "deleteNew"); err != nil {
 		return err
 	}
 

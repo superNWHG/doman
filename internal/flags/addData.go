@@ -3,8 +3,8 @@ package flags
 import (
 	"path/filepath"
 
-	"github.com/superNWHG/doman/cmd"
 	"github.com/superNWHG/doman/internal/data"
+	"github.com/superNWHG/doman/pkg/symlink"
 )
 
 func addData(path string, name string, newPath string) error {
@@ -30,7 +30,7 @@ func addData(path string, name string, newPath string) error {
 		return err
 	}
 
-	if err := cmd.NewLink(newPathSlice, namePathSlice, "deleteOld"); err != nil {
+	if err := symlink.NewLink(newPathSlice, namePathSlice, "deleteOld"); err != nil {
 		return err
 	}
 

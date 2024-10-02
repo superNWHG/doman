@@ -3,7 +3,8 @@ package data
 import (
 	"path/filepath"
 
-	"github.com/superNWHG/doman/cmd"
+	"github.com/superNWHG/doman/internal/git"
+	"github.com/superNWHG/doman/pkg/gitcredentials"
 )
 
 func Sync(path string, message string, push bool, auth bool) error {
@@ -17,7 +18,7 @@ func Sync(path string, message string, push bool, auth bool) error {
 
 	var name, pass, mail string
 	if auth {
-		err, name, mail, pass = cmd.GetGitCredentials()
+		err, name, mail, pass = gitcredentials.GetGitCredentials()
 		if err != nil {
 			return err
 		}
@@ -27,16 +28,16 @@ func Sync(path string, message string, push bool, auth bool) error {
 		pass = ""
 	}
 
-	if err := cmd.Add(path, files); err != nil {
+	if err := git.Add(path, files); err != nil {
 		return err
 	}
 
-	if err := cmd.Commit(path, message, name, mail); err != nil {
+	if err := git.Commit(path, message, name, mail); err != nil {
 		return err
 	}
 
 	if push {
-		if err := cmd.Push(path, name, pass); err != nil {
+		if err := git.Push(path, name, pass); err != nil {
 			return err
 		}
 	}

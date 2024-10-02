@@ -1,9 +1,9 @@
 package flags
 
-import "github.com/superNWHG/doman/cmd"
+import "github.com/superNWHG/doman/internal/git"
 
 func newCloneRepo(path string, url string) error {
-	if err := cmd.CloneRepo(path, url); err != nil {
+	if err := git.CloneRepo(path, url); err != nil {
 		return err
 	}
 
@@ -11,7 +11,7 @@ func newCloneRepo(path string, url string) error {
 }
 
 func newInitRepo(path string, url string) error {
-	if err := cmd.InitRepo(path, url); err != nil {
+	if err := git.InitRepo(path, url); err != nil {
 		return err
 	}
 
