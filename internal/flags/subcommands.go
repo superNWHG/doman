@@ -43,8 +43,7 @@ func SetSubcommands() error {
 
 	switch os.Args[1] {
 	case "new":
-		err := newRepoCmd.Parse(os.Args[2:])
-		if err != nil {
+		if err := newRepoCmd.Parse(os.Args[2:]); err != nil {
 			return err
 		}
 
