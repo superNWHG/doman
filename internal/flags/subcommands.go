@@ -48,6 +48,11 @@ func SetSubcommands() error {
 			return err
 		}
 
+		if *newRepoUrl == "" {
+			err := errors.New("Url flag is required")
+			return err
+		}
+
 		if *newRepoClone {
 			if err := newCloneRepo(*newRepoPath, *newRepoUrl); err != nil {
 				return err
@@ -76,6 +81,12 @@ func SetSubcommands() error {
 		if err := addCmd.Parse(os.Args[2:]); err != nil {
 			return err
 		}
+
+		if *addEntry == "" {
+			err := errors.New("Entry flag is required")
+			return err
+		}
+
 		if err := addData(*addPath, *addName, *addEntry); err != nil {
 			return err
 		}
