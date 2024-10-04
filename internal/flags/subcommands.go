@@ -126,6 +126,7 @@ func SetSubcommands() error {
 		return nil
 	}
 
+	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd)
 	err := errors.New("Invalid subcommand")
 	return err
 }
