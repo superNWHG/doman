@@ -2,37 +2,37 @@ package flags
 
 import (
 	"errors"
-	"flag"
 	"os"
 
+	"github.com/spf13/pflag"
 	"github.com/superNWHG/doman/internal/data"
 )
 
 func SetSubcommands() error {
-	newRepoCmd := flag.NewFlagSet("new", flag.ExitOnError)
+	newRepoCmd := pflag.NewFlagSet("new", pflag.ExitOnError)
 	newRepoClone := newRepoCmd.Bool("clone", false, "Set to true to clone a repo instead of initializing a new one")
 	newRepoDataFile := newRepoCmd.Bool("datafile", true, "Set to false if you don't wat to create a data file to keep track of your dotfiles")
 	newRepoPath := newRepoCmd.String("path", "./", "Path to the new repo")
 	newRepoUrl := newRepoCmd.String("url", "", "URL of the repo")
 
-	initCmd := flag.NewFlagSet("init", flag.ExitOnError)
+	initCmd := pflag.NewFlagSet("init", pflag.ExitOnError)
 	initPath := initCmd.String("path", "./", "Path to the repo")
 
-	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
+	addCmd := pflag.NewFlagSet("add", pflag.ExitOnError)
 	addPath := addCmd.String("path", "./", "Path to the repo")
 	addName := addCmd.String("name", "", "Name of the dotfile entry")
 	addEntry := addCmd.String("entry", "", "Path to the new dotfile entry")
 
-	readCmd := flag.NewFlagSet("read", flag.ExitOnError)
+	readCmd := pflag.NewFlagSet("read", pflag.ExitOnError)
 	readPath := readCmd.String("path", "./", "Path to the repo")
 
-	syncCmd := flag.NewFlagSet("sync", flag.ExitOnError)
+	syncCmd := pflag.NewFlagSet("sync", pflag.ExitOnError)
 	syncPath := syncCmd.String("path", "./", "Path to the repo")
 	syncMessage := syncCmd.String("message", "New changes", "Custom commit message")
 	syncAuth := syncCmd.Bool("authentication", true, "Set to false to not ask for username and password")
 	syncPush := syncCmd.Bool("push", false, "Set to true to automatically push to the remote repository")
 
-	linkCmd := flag.NewFlagSet("link", flag.ExitOnError)
+	linkCmd := pflag.NewFlagSet("link", pflag.ExitOnError)
 	linkPath := linkCmd.String("path", "./", "Path to the repo")
 
 	if len(os.Args) < 2 {

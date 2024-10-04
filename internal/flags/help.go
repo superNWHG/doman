@@ -1,17 +1,18 @@
 package flags
 
 import (
-	"flag"
 	"fmt"
+
+	"github.com/spf13/pflag"
 )
 
 func getHelp(
-	new flag.FlagSet,
-	init flag.FlagSet,
-	add flag.FlagSet,
-	read flag.FlagSet,
-	sync flag.FlagSet,
-	link flag.FlagSet,
+	new pflag.FlagSet,
+	init pflag.FlagSet,
+	add pflag.FlagSet,
+	read pflag.FlagSet,
+	sync pflag.FlagSet,
+	link pflag.FlagSet,
 ) {
 	fmt.Println("doman is a tool to manage your dotfiles")
 	fmt.Println("\nUsage:")
