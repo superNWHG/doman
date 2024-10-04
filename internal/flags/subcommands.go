@@ -35,6 +35,11 @@ func SetSubcommands() error {
 	linkCmd := pflag.NewFlagSet("link", pflag.ExitOnError)
 	linkPath := linkCmd.String("path", "./", "Path to the repo")
 
+	editCmd := pflag.NewFlagSet("edit", pflag.ExitOnError)
+	editPath := editCmd.String("path", "./", "Path to the repo")
+	editName := editCmd.String("name", "", "Name of the dotfile entry to edit")
+	editEditor := editCmd.String("editor", "", "Editor you want to use (leave empty to use default)")
+
 	if len(os.Args) < 2 {
 		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd)
 		err := errors.New("Expected subcommand")
@@ -124,6 +129,20 @@ func SetSubcommands() error {
 		}
 
 		return nil
+
+	case "edit":
+		if err := editCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+
+		if *editName == "" {
+			err := errors.New("Name flag is required")
+			return err
+		}
+
+		if err := data.EditData(*editPath, *editName, *editEditor); err != nil {
+			return err
+		}
 	}
 
 	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd)
