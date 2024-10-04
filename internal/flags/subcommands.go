@@ -41,7 +41,7 @@ func SetSubcommands() error {
 	editEditor := editCmd.String("editor", "", "Editor you want to use (leave empty to use default)")
 
 	if len(os.Args) < 2 {
-		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd)
+		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd)
 		err := errors.New("Expected subcommand")
 		return err
 	}
@@ -145,7 +145,7 @@ func SetSubcommands() error {
 		}
 	}
 
-	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd)
+	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd)
 	err := errors.New("Invalid subcommand")
 	return err
 }
