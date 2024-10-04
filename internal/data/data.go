@@ -1,9 +1,9 @@
 package data
 
 import (
-	"encoding/json"
 	"errors"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/superNWHG/doman/pkg/symlink"
@@ -41,17 +41,9 @@ func ReadDataFile(path string) ([]string, []string, map[string]interface{}, erro
 		return nil, nil, nil, err
 	}
 
-	keys := []string{}
-	values := []string{}
-
-	for key, rawMsg := range obj {
-		var value string
-		if err := json.Unmarshal(*rawMsg, &value); err != nil {
-			return nil, nil, nil, err
-		}
-
-		keys = append(keys, key)
-		values = append(values, value)
+	keys, values, err := jsonToMap(obj)
+	if err != nil {
+		return nil, nil, nil, err
 	}
 
 	combined := make(map[string]interface{})
@@ -78,6 +70,82 @@ func NewData(path string, newDataKeys []string, newDataValues []string) error {
 	}
 
 	if err = os.WriteFile(path, data, 0644); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func EditData(path string, name string, editor string) error {
+	tmpFile := "/tmp/dotfiles.json"
+
+	if editor == "" {
+		if editorEnv := os.Getenv("EDITOR"); editorEnv != "" {
+			editor = editorEnv
+		} else {
+			err := errors.New("No editor found")
+			return err
+		}
+	}
+
+	path = filepath.Join(path, "dotfiles.json")
+	_, _, data, err := ReadDataFile(path)
+	if err != nil {
+		return err
+	}
+
+	if data[name] == nil {
+		err := errors.New("Name not found")
+		return err
+	}
+
+	nameData := map[string]interface{}{name: data[name]}
+	jsonData, err := encodeJson(nameData)
+	if err != nil {
+		return err
+	}
+
+	if err := os.WriteFile(tmpFile, jsonData, 0644); err != nil {
+		return err
+	}
+
+	cmd := exec.Command(editor, tmpFile)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+
+	newJsonData, err := os.ReadFile(tmpFile)
+	if err != nil {
+		return err
+	}
+
+	obj, err := decodeJson(newJsonData)
+	if err != nil {
+		return err
+	}
+
+	keys, values, err := jsonToMap(obj)
+	if err != nil {
+		return err
+	}
+
+	data[keys[0]] = values[0]
+
+	delete(data, name)
+
+	newJson, err := encodeJson(data)
+	if err != nil {
+		return err
+	}
+
+	if err := os.Remove(path); err != nil {
+		return err
+	}
+
+	if err := os.WriteFile(path, newJson, 0644); err != nil {
 		return err
 	}
 
