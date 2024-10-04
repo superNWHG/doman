@@ -19,3 +19,20 @@ func encodeJson(data map[string]interface{}) ([]byte, error) {
 
 	return jsonString, nil
 }
+
+func jsonToMap(obj map[string]*json.RawMessage) ([]string, []string, error) {
+	keys := []string{}
+	values := []string{}
+
+	for key, rawMsg := range obj {
+		var value string
+		if err := json.Unmarshal(*rawMsg, &value); err != nil {
+			return nil, nil, err
+		}
+
+		keys = append(keys, key)
+		values = append(values, value)
+	}
+
+	return keys, values, nil
+}

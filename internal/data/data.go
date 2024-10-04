@@ -1,7 +1,6 @@
 package data
 
 import (
-	"encoding/json"
 	"errors"
 	"os"
 	"os/exec"
@@ -42,17 +41,9 @@ func ReadDataFile(path string) ([]string, []string, map[string]interface{}, erro
 		return nil, nil, nil, err
 	}
 
-	keys := []string{}
-	values := []string{}
-
-	for key, rawMsg := range obj {
-		var value string
-		if err := json.Unmarshal(*rawMsg, &value); err != nil {
-			return nil, nil, nil, err
-		}
-
-		keys = append(keys, key)
-		values = append(values, value)
+	keys, values, err := jsonToMap(obj)
+	if err != nil {
+		return nil, nil, nil, err
 	}
 
 	combined := make(map[string]interface{})
@@ -136,17 +127,9 @@ func EditData(path string, name string, editor string) error {
 		return err
 	}
 
-	keys := []string{}
-	values := []string{}
-
-	for key, rawMsg := range obj {
-		var value string
-		if err := json.Unmarshal(*rawMsg, &value); err != nil {
-			return err
-		}
-
-		keys = append(keys, key)
-		values = append(values, value)
+	keys, values, err := jsonToMap(obj)
+	if err != nil {
+		return err
 	}
 
 	data[keys[0]] = values[0]
