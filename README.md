@@ -31,10 +31,10 @@ export PATH=$PATH:$USER/go/bin
 
 - Creating a new dotfiles repo and init doman in it (`doman new [flag(s)]`)
 - Init in an existing dotfiles repo (`doman init [flag(s)]`)
-- Add a new config folder/file (`doman init [flag(s)]`)
+- Add a new config folder/file (`doman add [flag(s)]`)
 - See all configurations that are being tracked by doman (`doman read [flag(s)]`)
 - Sync configurations with the remote repository (`doman sync [flag(s)]`)
-- Symlink all files that are not symlinked already (`doman sync [flag(s)]`)
+- Symlink all files that are not symlinked already (`doman link [flag(s)]`)
 - Edit a dotfile entry with your preferred editory (`doman edit [flag(s)]`)
 
 **For a list with also flags, run `doman` with no arguments**
