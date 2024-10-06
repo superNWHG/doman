@@ -19,7 +19,7 @@ func NewLink(oldPath []string, newPath []string, method string) error {
 		}
 	case "deleteNew":
 		for i := range newPath {
-			if err := os.Remove(newPath[i]); err != nil {
+			if err := os.RemoveAll(newPath[i]); err != nil {
 				return err
 			}
 		}
