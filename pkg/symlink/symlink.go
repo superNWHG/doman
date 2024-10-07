@@ -6,7 +6,7 @@ import (
 )
 
 func NewLink(oldPath []string, newPath []string, method string) error {
-	if method != "deleteOld" && method != "deleteNew" {
+	if method != "deleteOld" && method != "deleteNew" && method != "deleteOldDelete" {
 		err := errors.New("Invalid method")
 		return err
 	}
@@ -14,6 +14,12 @@ func NewLink(oldPath []string, newPath []string, method string) error {
 	case "deleteOld":
 		for i := range oldPath {
 			if err := os.Rename(oldPath[i], newPath[i]); err != nil {
+				return err
+			}
+		}
+	case "deleteOldDelete":
+		for i := range oldPath {
+			if err := os.RemoveAll(oldPath[i]); err != nil {
 				return err
 			}
 		}
