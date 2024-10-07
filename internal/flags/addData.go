@@ -38,16 +38,13 @@ func addData(path string, name string, newPath string) error {
 }
 
 func addExistingData(path string, oldPath string, newPath string) error {
-	path = filepath.Join(path, "dotfiles.json")
-
 	var name string
-
-	for i := len(newPath); i > 0; i-- {
-		if string(newPath[i-1]) == "/" {
-			name = newPath[i:]
-			i = 0
-		}
+	name, err := filepath.Rel(path, oldPath)
+	if err != nil {
+		return err
 	}
+
+	path = filepath.Join(path, "dotfiles.json")
 
 	nameSlice := []string{name}
 	oldPathSlice := []string{oldPath}
