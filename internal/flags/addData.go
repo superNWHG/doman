@@ -9,13 +9,7 @@ import (
 
 func addData(path string, name string, newPath string) error {
 	if name == "" {
-		for i := len(newPath); i > 0; i-- {
-			if string(newPath[i-1]) == "/" {
-				name = newPath[i:]
-				i = 0
-			}
-		}
-
+		name = filepath.Base(newPath)
 	}
 
 	namePath := filepath.Join(path, name)
