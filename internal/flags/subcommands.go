@@ -22,6 +22,7 @@ func SetSubcommands() error {
 	addPath := addCmd.String("path", "./", "Path to the repo")
 	addName := addCmd.String("name", "", "Name of the dotfile entry")
 	addEntry := addCmd.String("entry", "", "Path to the new dotfile entry")
+	addExisting := addCmd.Bool("existing", false, "Set to true to add an existing file in your dotfiles directory")
 
 	readCmd := pflag.NewFlagSet("read", pflag.ExitOnError)
 	readPath := readCmd.String("path", "./", "Path to the repo")
@@ -91,8 +92,14 @@ func SetSubcommands() error {
 			return err
 		}
 
-		if err := addData(*addPath, *addName, *addEntry); err != nil {
-			return err
+		if *addExisting {
+			if err := addExistingData(*addPath, *addName, *addEntry); err != nil {
+				return err
+			}
+		} else {
+			if err := addData(*addPath, *addName, *addEntry); err != nil {
+				return err
+			}
 		}
 
 		return nil
