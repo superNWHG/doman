@@ -30,6 +30,7 @@ func SetSubcommands() error {
 	syncCmd := pflag.NewFlagSet("sync", pflag.ExitOnError)
 	syncPath := syncCmd.String("path", "./", "Path to the repo")
 	syncMessage := syncCmd.String("message", "New changes", "Custom commit message")
+	syncFiles := syncCmd.StringSlice("files", []string{}, "Files you want to sync (leave empty to sync all)")
 	syncAuth := syncCmd.Bool("authentication", true, "Set to false to not ask for username and password")
 	syncPush := syncCmd.Bool("push", false, "Set to true to automatically push to the remote repository")
 
@@ -120,7 +121,7 @@ func SetSubcommands() error {
 			return err
 		}
 
-		if err := data.Sync(*syncPath, *syncMessage, *syncPush, *syncAuth); err != nil {
+		if err := data.Sync(*syncPath, *syncMessage, *syncPush, *syncAuth, *syncFiles); err != nil {
 			return err
 		}
 

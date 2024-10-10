@@ -2,19 +2,29 @@ package data
 
 import (
 	"path/filepath"
+	"slices"
 
 	"github.com/superNWHG/doman/internal/git"
 	"github.com/superNWHG/doman/pkg/gitcredentials"
 )
 
-func Sync(path string, message string, push bool, auth bool) error {
+func Sync(path string, message string, push bool, auth bool, filesToSync []string) error {
 	dataPath := filepath.Join(path, "dotfiles.json")
 	files, _, _, err := ReadDataFile(dataPath)
 	if err != nil {
 		return err
 	}
 
-	files = append(files, "dotfiles.json")
+	if len(filesToSync) == 0 {
+		files = append(files, "dotfiles.json")
+	} else {
+		for i := range filesToSync {
+			if !slices.Contains(files, filesToSync[i]) {
+				filesToSync = slices.Delete(filesToSync, i, i)
+			}
+		}
+		files = filesToSync
+	}
 
 	var name, pass, mail string
 	if auth {
