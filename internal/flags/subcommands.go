@@ -48,7 +48,7 @@ func SetSubcommands() error {
 	configNew := configCmd.Bool("new", false, "Create a new config file")
 
 	if len(os.Args) < 2 {
-		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd)
+		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
 		err := errors.New("Expected subcommand")
 		return err
 	}
@@ -173,7 +173,7 @@ func SetSubcommands() error {
 		return nil
 	}
 
-	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd)
+	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
 	err := errors.New("Invalid subcommand")
 	return err
 }
