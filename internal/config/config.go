@@ -49,7 +49,14 @@ func NewConfig(path string) error {
 
 	if _, err := os.Stat(path); err != nil {
 		defaults := setDefaults()
-		// Write the default config to the file
+		tomlData, err := encodeToml(defaults)
+		if err != nil {
+			return err
+		}
+
+		if err := os.WriteFile(path, tomlData, 0644); err != nil {
+			return err
+		}
 	} else {
 		err := errors.New("Config file already exists")
 		return err
