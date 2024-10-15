@@ -11,10 +11,10 @@ func encodeToml(values *config) ([]byte, error) {
 	return encodedToml, nil
 }
 
-func decodeToml(data []byte, configStruct config) (*config, error) {
+func decodeToml(data []byte, configStruct *config) (*config, error) {
 	if err := toml.Unmarshal(data, configStruct); err != nil {
 		return nil, err
 	}
 
-	return &configStruct, nil
+	return configStruct, nil
 }

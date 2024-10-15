@@ -68,7 +68,7 @@ func NewConfig(path string) error {
 func ReadConfig(path string) (*config, error) {
 	path = filepath.Join(path, "config.toml")
 
-	if _, err := os.Stat(path); err == nil {
+	if _, err := os.Stat(path); err != nil {
 		err := errors.New("Config file does not exist")
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func ReadConfig(path string) (*config, error) {
 		return nil, err
 	}
 
-	config, err := decodeToml(fileContent, config{})
+	config, err := decodeToml(fileContent, &config{})
 	if err != nil {
 		return nil, err
 	}
