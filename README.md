@@ -1,7 +1,6 @@
 # Welcome to the doman repository!
 
-Doman is a dotfiles manager that's not really usable yet because it misses some basic functionality.
-I would not recommend to run it as you dotfile manager, although I won't stop you if you do so.
+Doman is a personal project, please do not expect working code or it having the features you would expect although I use it myself.
 
 # Building instructions
 
