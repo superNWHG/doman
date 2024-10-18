@@ -1,6 +1,9 @@
 package data
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 func decodeJson(data []byte) (map[string]*json.RawMessage, error) {
 	var obj map[string]*json.RawMessage
@@ -35,4 +38,13 @@ func jsonToMap(obj map[string]*json.RawMessage) ([]string, []string, error) {
 	}
 
 	return keys, values, nil
+}
+
+func formatJson(data []byte) ([]byte, error) {
+	var out bytes.Buffer
+	if err := json.Indent(&out, data, "", "	"); err != nil {
+		return nil, err
+	}
+
+	return out.Bytes(), nil
 }
