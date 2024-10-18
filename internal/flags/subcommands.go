@@ -46,6 +46,7 @@ func SetSubcommands() error {
 	configCmd := pflag.NewFlagSet("config", pflag.ExitOnError)
 	configPath := configCmd.String("path", "./", "Path to the repo")
 	configNew := configCmd.Bool("new", false, "Create a new config file")
+	configRead := configCmd.Bool("read", false, "Read the config file")
 
 	if len(os.Args) < 2 {
 		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
@@ -166,6 +167,12 @@ func SetSubcommands() error {
 
 		if *configNew {
 			if err := config.NewConfig(*configPath); err != nil {
+				return err
+			}
+		}
+
+		if *configRead {
+			if err := readconfig(*configPath); err != nil {
 				return err
 			}
 		}
