@@ -78,10 +78,10 @@ func ReadConfig(path string) (*config, error) {
 		return nil, err
 	}
 
-	config, err := decodeToml(fileContent, &config{})
+	userConfig, err := decodeToml(fileContent, &config{})
 	if err != nil {
 		return nil, err
 	}
 
-	return config, nil
+	return userConfig, nil
 }
