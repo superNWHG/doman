@@ -7,7 +7,7 @@ import (
 	"github.com/superNWHG/doman/pkg/symlink"
 )
 
-func addData(path string, name string, newPath string) error {
+func addData(path string, name string, newPath string, format bool) error {
 	if name == "" {
 		name = filepath.Base(newPath)
 	}
@@ -20,7 +20,7 @@ func addData(path string, name string, newPath string) error {
 	namePathSlice := []string{namePath}
 	newPathSlice := []string{newPath}
 
-	if err := data.NewData(path, nameSlice, newPathSlice); err != nil {
+	if err := data.NewData(path, nameSlice, newPathSlice, format); err != nil {
 		return err
 	}
 
@@ -31,7 +31,7 @@ func addData(path string, name string, newPath string) error {
 	return nil
 }
 
-func addExistingData(path string, oldPath string, newPath string) error {
+func addExistingData(path string, oldPath string, newPath string, format bool) error {
 	var name string
 	name, err := filepath.Rel(path, oldPath)
 	if err != nil {
@@ -49,7 +49,7 @@ func addExistingData(path string, oldPath string, newPath string) error {
 	oldPathSlice := []string{oldPath}
 	newPathSlice := []string{newPath}
 
-	if err := data.NewData(path, nameSlice, newPathSlice); err != nil {
+	if err := data.NewData(path, nameSlice, newPathSlice, format); err != nil {
 		return err
 	}
 

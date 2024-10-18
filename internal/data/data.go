@@ -54,7 +54,7 @@ func ReadDataFile(path string) ([]string, []string, map[string]interface{}, erro
 	return keys, values, combined, err
 }
 
-func NewData(path string, newDataKeys []string, newDataValues []string) error {
+func NewData(path string, newDataKeys []string, newDataValues []string, format bool) error {
 	_, _, oldData, err := ReadDataFile(path)
 	if err != nil {
 		return err
@@ -69,6 +69,11 @@ func NewData(path string, newDataKeys []string, newDataValues []string) error {
 		return err
 	}
 
+	data, err = formatJson(data)
+	if err != nil {
+		return err
+	}
+
 	if err = os.WriteFile(path, data, 0644); err != nil {
 		return err
 	}
@@ -76,7 +81,7 @@ func NewData(path string, newDataKeys []string, newDataValues []string) error {
 	return nil
 }
 
-func EditData(path string, name string, editor string) error {
+func EditData(path string, name string, editor string, format bool) error {
 	tmpFile := "/tmp/dotfiles.json"
 
 	if editor == "" {
@@ -139,6 +144,13 @@ func EditData(path string, name string, editor string) error {
 	newJson, err := encodeJson(data)
 	if err != nil {
 		return err
+	}
+
+	if format {
+		newJson, err = formatJson(newJson)
+		if err != nil {
+			return err
+		}
 	}
 
 	if err := os.Remove(path); err != nil {

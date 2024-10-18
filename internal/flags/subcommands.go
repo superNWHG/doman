@@ -24,6 +24,7 @@ func SetSubcommands() error {
 	addName := addCmd.String("name", "", "Name of the dotfile entry")
 	addEntry := addCmd.String("entry", "", "Path to the new dotfile entry")
 	addExisting := addCmd.Bool("existing", false, "Set to true to add an existing file in your dotfiles directory")
+	addFormat := addCmd.Bool("format", true, "Automatically format dotfiles.json")
 
 	readCmd := pflag.NewFlagSet("read", pflag.ExitOnError)
 	readPath := readCmd.String("path", "./", "Path to the repo")
@@ -42,6 +43,7 @@ func SetSubcommands() error {
 	editPath := editCmd.String("path", "./", "Path to the repo")
 	editName := editCmd.String("name", "", "Name of the dotfile entry to edit")
 	editEditor := editCmd.String("editor", "", "Editor you want to use (leave empty to use default)")
+	editFormat := editCmd.Bool("format", true, "Automatically format dotfiles.json")
 
 	configCmd := pflag.NewFlagSet("config", pflag.ExitOnError)
 	configPath := configCmd.String("path", "./", "Path to the repo")
@@ -100,11 +102,11 @@ func SetSubcommands() error {
 		}
 
 		if *addExisting {
-			if err := addExistingData(*addPath, *addName, *addEntry); err != nil {
+			if err := addExistingData(*addPath, *addName, *addEntry, *addFormat); err != nil {
 				return err
 			}
 		} else {
-			if err := addData(*addPath, *addName, *addEntry); err != nil {
+			if err := addData(*addPath, *addName, *addEntry, *addFormat); err != nil {
 				return err
 			}
 		}
@@ -154,7 +156,7 @@ func SetSubcommands() error {
 			return err
 		}
 
-		if err := data.EditData(*editPath, *editName, *editEditor); err != nil {
+		if err := data.EditData(*editPath, *editName, *editEditor, *editFormat); err != nil {
 			return err
 		}
 
