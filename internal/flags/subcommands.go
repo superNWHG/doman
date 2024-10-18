@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/pflag"
+	"github.com/superNWHG/doman/internal/config"
 	"github.com/superNWHG/doman/internal/data"
 )
 
@@ -42,8 +43,13 @@ func SetSubcommands() error {
 	editName := editCmd.String("name", "", "Name of the dotfile entry to edit")
 	editEditor := editCmd.String("editor", "", "Editor you want to use (leave empty to use default)")
 
+	configCmd := pflag.NewFlagSet("config", pflag.ExitOnError)
+	configPath := configCmd.String("path", "./", "Path to the repo")
+	configNew := configCmd.Bool("new", false, "Create a new config file")
+	configRead := configCmd.Bool("read", false, "Read the config file")
+
 	if len(os.Args) < 2 {
-		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd)
+		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
 		err := errors.New("Expected subcommand")
 		return err
 	}
@@ -151,9 +157,30 @@ func SetSubcommands() error {
 		if err := data.EditData(*editPath, *editName, *editEditor); err != nil {
 			return err
 		}
+
+		return nil
+
+	case "config":
+		if err := configCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+
+		if *configNew {
+			if err := config.NewConfig(*configPath); err != nil {
+				return err
+			}
+		}
+
+		if *configRead {
+			if err := readconfig(*configPath); err != nil {
+				return err
+			}
+		}
+
+		return nil
 	}
 
-	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd)
+	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
 	err := errors.New("Invalid subcommand")
 	return err
 }
