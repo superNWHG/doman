@@ -33,6 +33,6 @@ export PATH=$PATH:$HOME/go/bin
 - See all configurations that are being tracked by doman (`doman read [flag(s)]`)
 - Sync configurations with the remote repository (`doman sync [flag(s)]`)
 - Symlink all files that are not symlinked already (`doman link [flag(s)]`)
-- Edit a dotfile entry with your preferred editory (`doman edit [flag(s)]`)
+- Edit a dotfile entry with your preferred editor (`doman edit [flag(s)]`)
 
 **For a list with also flags, run `doman` with no arguments**
