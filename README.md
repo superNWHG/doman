@@ -22,7 +22,7 @@ go install
 If you command doesn't work after installing, you may need to add the following to your shell config (for example .zshrc or .bashrc)
 
 ```shell
-export PATH=$PATH:$USER/go/bin
+export PATH=$PATH:$HOME/go/bin
 ```
 
 # Current features
