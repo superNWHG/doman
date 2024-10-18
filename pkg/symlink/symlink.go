@@ -5,7 +5,9 @@ import (
 	"os"
 )
 
-func NewLink(oldPath []string, newPath []string, method string) error {
+type method string
+
+func NewLink(oldPath []string, newPath []string, method method) error {
 	if method != "deleteOld" && method != "deleteNew" && method != "deleteOldDelete" {
 		err := errors.New("Invalid method")
 		return err
