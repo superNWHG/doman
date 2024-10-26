@@ -2,7 +2,7 @@ package config
 
 import "github.com/BurntSushi/toml"
 
-func encodeToml(values *config) ([]byte, error) {
+func encodeToml(values interface{}) ([]byte, error) {
 	encodedToml, err := toml.Marshal(values)
 	if err != nil {
 		return nil, err
@@ -11,7 +11,7 @@ func encodeToml(values *config) ([]byte, error) {
 	return encodedToml, nil
 }
 
-func decodeToml(data []byte, configStruct *config) (*config, error) {
+func decodeToml(data []byte, configStruct interface{}) (interface{}, error) {
 	if err := toml.Unmarshal(data, configStruct); err != nil {
 		return nil, err
 	}

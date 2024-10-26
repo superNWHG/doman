@@ -6,50 +6,11 @@ import (
 	"path/filepath"
 )
 
-type (
-	config struct {
-		Add  Add  `toml:"new"`
-		Sync Sync `toml:"sync"`
-		Edit Edit `toml:"edit"`
-	}
-
-	Add struct {
-		Existing bool `toml:"existing"`
-	}
-
-	Sync struct {
-		Authentication bool   `toml:"authentication"`
-		Message        string `toml:"message"`
-		Push           bool   `toml:"push"`
-	}
-
-	Edit struct {
-		Editor string `toml:"editor"`
-	}
-)
-
-func setDefaults() *config {
-	return &config{
-		Add: Add{
-			Existing: false,
-		},
-		Sync: Sync{
-			Authentication: true,
-			Message:        "New changes",
-			Push:           false,
-		},
-		Edit: Edit{
-			Editor: "",
-		},
-	}
-}
-
-func NewConfig(path string) error {
+func NewConfig(path string, configStruct interface{}) error {
 	path = filepath.Join(path, "config.toml")
 
 	if _, err := os.Stat(path); err != nil {
-		defaults := setDefaults()
-		tomlData, err := encodeToml(defaults)
+		tomlData, err := encodeToml(configStruct)
 		if err != nil {
 			return err
 		}
@@ -65,7 +26,7 @@ func NewConfig(path string) error {
 	return nil
 }
 
-func ReadConfig(path string) (*config, error) {
+func ReadConfig(path string, configStruct interface{}) (interface{}, error) {
 	path = filepath.Join(path, "config.toml")
 
 	if _, err := os.Stat(path); err != nil {
@@ -78,7 +39,7 @@ func ReadConfig(path string) (*config, error) {
 		return nil, err
 	}
 
-	userConfig, err := decodeToml(fileContent, &config{})
+	userConfig, err := decodeToml(fileContent, &configStruct)
 	if err != nil {
 		return nil, err
 	}

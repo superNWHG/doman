@@ -9,6 +9,67 @@ import (
 	"github.com/superNWHG/doman/internal/data"
 )
 
+type (
+	Defaults struct {
+		NewRepo `toml:"NewRepo"`
+		Init    `toml:"Init"`
+		Add     `toml:"Add"`
+		Read    `toml:"Read"`
+		Sync    `toml:"Sync"`
+		Link    `toml:"Link"`
+		Edit    `toml:"Edit"`
+		Config  `toml:"Config"`
+	}
+
+	NewRepo struct {
+		NewRepoClone    bool   `default:"false" toml:"newRepoClone"`
+		NewRepoDataFile bool   `default:"true" toml:"newRepoDataFile"`
+		NewRepoPath     string `default:"./" toml:"newRepoPath"`
+		NewRepoUrl      string `default:"" toml:"newRepoUrl"`
+	}
+
+	Init struct {
+		InitPath string `default:"./" toml:"initPath"`
+	}
+
+	Add struct {
+		AddPath     string `default:"./" toml:"addPath"`
+		AddName     string `default:"" toml:"addName"`
+		AddEntry    string `default:"" toml:"addEntry"`
+		AddExisting bool   `default:"false" toml:"addExisting"`
+		AddFormat   bool   `default:"true" toml:"addFormat"`
+	}
+
+	Read struct {
+		ReadPath string `default:"./" toml:"readPath"`
+	}
+
+	Sync struct {
+		SyncPath    string   `default:"./" toml:"syncPath"`
+		SyncMessage string   `default:"New changes" toml:"syncMessage"`
+		SyncFiles   []string `default:"[]string{}" toml:"syncFiles"`
+		SyncAuth    bool     `default:"true" toml:"syncAuth"`
+		SyncPush    bool     `default:"false" toml:"syncPush"`
+	}
+
+	Link struct {
+		LinkPath string `default:"./" toml:"linkPath"`
+	}
+
+	Edit struct {
+		EditPath   string `default:"./" toml:"editPath"`
+		EditName   string `default:"" toml:"editName"`
+		EditEditor string `default:"" toml:"editEditor"`
+		EditFormat bool   `default:"true" toml:"editFormat"`
+	}
+
+	Config struct {
+		ConfigPath string `default:"./" toml:"configPath"`
+		ConfigNew  bool   `default:"false" toml:"configNew"`
+		ConfigRead bool   `default:"false" toml:"configRead"`
+	}
+)
+
 func SetSubcommands() error {
 	newRepoCmd := pflag.NewFlagSet("new", pflag.ExitOnError)
 	newRepoClone := newRepoCmd.Bool("clone", false, "Set to true to clone a repo instead of initializing a new one")
@@ -168,13 +229,13 @@ func SetSubcommands() error {
 		}
 
 		if *configNew {
-			if err := config.NewConfig(*configPath); err != nil {
+			if err := config.NewConfig(*configPath, Defaults{}); err != nil {
 				return err
 			}
 		}
 
 		if *configRead {
-			if err := readconfig(*configPath); err != nil {
+			if err := readconfig(*configPath, &Defaults{}); err != nil {
 				return err
 			}
 		}

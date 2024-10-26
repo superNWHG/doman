@@ -7,11 +7,12 @@ import (
 	"github.com/superNWHG/doman/internal/config"
 )
 
-func readconfig(path string) error {
-	configValues, err := config.ReadConfig(path)
+func readconfig(path string, configStruct interface{}) error {
+	configValues, err := config.ReadConfig(path, configStruct)
 	if err != nil {
 		return err
 	}
+	configValues = reflect.New(reflect.TypeOf(configStruct).Elem()).Interface()
 
 	userConfig := reflect.Indirect(reflect.ValueOf(configValues))
 
