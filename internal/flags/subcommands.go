@@ -76,8 +76,10 @@ func SetSubcommands() error {
 	path := pflag.String("path", "./", "Path to the repo")
 
 	defaults, err := getDefaults(*path)
-	if err != nil {
+	if err != nil && err.Error() != "Config file does not exist" {
 		return err
+	} else if err.Error() == "Config file does not exist" {
+		defaults = &Defaults{}
 	}
 
 	newRepoCmd := pflag.NewFlagSet("new", pflag.ExitOnError)
