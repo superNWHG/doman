@@ -18,3 +18,11 @@ func decodeToml(data []byte, configStruct interface{}) (interface{}, error) {
 
 	return configStruct, nil
 }
+
+func decodeTomlAny(data []byte, configStruct any) (any, error) {
+	if err := toml.Unmarshal(data, configStruct); err != nil {
+		return nil, err
+	}
+
+	return configStruct, nil
+}
