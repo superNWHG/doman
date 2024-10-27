@@ -62,40 +62,55 @@ type (
 	}
 )
 
+func getDefaults(path string) (*Defaults, error) {
+	defaults := Defaults{}
+	userDefaults, err := config.ReadConfigAny(path, &defaults)
+	if err != nil {
+		return nil, err
+	}
+
+	return userDefaults.(*Defaults), nil
+}
+
 func SetSubcommands() error {
 	path := pflag.String("path", "./", "Path to the repo")
 
+	defaults, err := getDefaults(*path)
+	if err != nil {
+		return err
+	}
+
 	newRepoCmd := pflag.NewFlagSet("new", pflag.ExitOnError)
-	newRepoClone := newRepoCmd.Bool("clone", false, "Set to true to clone a repo instead of initializing a new one")
-	newRepoDataFile := newRepoCmd.Bool("datafile", true, "Set to false if you don't wat to create a data file to keep track of your dotfiles")
-	newRepoUrl := newRepoCmd.String("url", "", "URL of the repo")
+	newRepoClone := newRepoCmd.Bool("clone", defaults.NewRepoClone, "Set to true to clone a repo instead of initializing a new one")
+	newRepoDataFile := newRepoCmd.Bool("datafile", defaults.NewRepoDataFile, "Set to false if you don't wat to create a data file to keep track of your dotfiles")
+	newRepoUrl := newRepoCmd.String("url", defaults.NewRepoUrl, "URL of the repo")
 
 	initCmd := pflag.NewFlagSet("init", pflag.ExitOnError)
 
 	addCmd := pflag.NewFlagSet("add", pflag.ExitOnError)
-	addName := addCmd.String("name", "", "Name of the dotfile entry")
-	addEntry := addCmd.String("entry", "", "Path to the new dotfile entry")
-	addExisting := addCmd.Bool("existing", false, "Set to true to add an existing file in your dotfiles directory")
-	addFormat := addCmd.Bool("format", true, "Automatically format dotfiles.json")
+	addName := addCmd.String("name", defaults.AddName, "Name of the dotfile entry")
+	addEntry := addCmd.String("entry", defaults.AddEntry, "Path to the new dotfile entry")
+	addExisting := addCmd.Bool("existing", defaults.AddExisting, "Set to true to add an existing file in your dotfiles directory")
+	addFormat := addCmd.Bool("format", defaults.AddFormat, "Automatically format dotfiles.json")
 
 	readCmd := pflag.NewFlagSet("read", pflag.ExitOnError)
 
 	syncCmd := pflag.NewFlagSet("sync", pflag.ExitOnError)
-	syncMessage := syncCmd.String("message", "New changes", "Custom commit message")
-	syncFiles := syncCmd.StringSlice("files", []string{}, "Files you want to sync (leave empty to sync all)")
-	syncAuth := syncCmd.Bool("authentication", true, "Set to false to not ask for username and password")
-	syncPush := syncCmd.Bool("push", false, "Set to true to automatically push to the remote repository")
+	syncMessage := syncCmd.String("message", defaults.SyncMessage, "Custom commit message")
+	syncFiles := syncCmd.StringSlice("files", defaults.SyncFiles, "Files you want to sync (leave empty to sync all)")
+	syncAuth := syncCmd.Bool("authentication", defaults.SyncAuth, "Set to false to not ask for username and password")
+	syncPush := syncCmd.Bool("push", defaults.SyncPush, "Set to true to automatically push to the remote repository")
 
 	linkCmd := pflag.NewFlagSet("link", pflag.ExitOnError)
 
 	editCmd := pflag.NewFlagSet("edit", pflag.ExitOnError)
-	editName := editCmd.String("name", "", "Name of the dotfile entry to edit")
-	editEditor := editCmd.String("editor", "", "Editor you want to use (leave empty to use default)")
-	editFormat := editCmd.Bool("format", true, "Automatically format dotfiles.json")
+	editName := editCmd.String("name", defaults.EditName, "Name of the dotfile entry to edit")
+	editEditor := editCmd.String("editor", defaults.EditEditor, "Editor you want to use (leave empty to use default)")
+	editFormat := editCmd.Bool("format", defaults.EditFormat, "Automatically format dotfiles.json")
 
 	configCmd := pflag.NewFlagSet("config", pflag.ExitOnError)
-	configNew := configCmd.Bool("new", false, "Create a new config file")
-	configRead := configCmd.Bool("read", false, "Read the config file")
+	configNew := configCmd.Bool("new", defaults.ConfigNew, "Create a new config file")
+	configRead := configCmd.Bool("read", defaults.ConfigRead, "Read the config file")
 
 	if len(os.Args) < 2 {
 		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
@@ -230,6 +245,6 @@ func SetSubcommands() error {
 	}
 
 	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
-	err := errors.New("Invalid subcommand")
+	err = errors.New("Invalid subcommand")
 	return err
 }
