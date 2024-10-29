@@ -71,11 +71,6 @@ func getDefaults(path string) (*Defaults, error) {
 		return nil, err
 	}
 
-	if userDefaults == nil {
-		userDefaults = &Defaults{}
-		return userDefaults.(*Defaults), err
-	}
-
 	return userDefaults.(*Defaults), nil
 }
 
