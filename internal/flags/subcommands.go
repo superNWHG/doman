@@ -12,11 +12,8 @@ import (
 type (
 	Defaults struct {
 		NewRepo `toml:"NewRepo"`
-		Init    `toml:"Init"`
 		Add     `toml:"Add"`
-		Read    `toml:"Read"`
 		Sync    `toml:"Sync"`
-		Link    `toml:"Link"`
 		Edit    `toml:"Edit"`
 		Config  `toml:"Config"`
 	}
@@ -27,9 +24,6 @@ type (
 		NewRepoUrl      string `default:"" toml:"newRepoUrl"`
 	}
 
-	Init struct {
-	}
-
 	Add struct {
 		AddName     string `default:"" toml:"addName"`
 		AddEntry    string `default:"" toml:"addEntry"`
@@ -37,17 +31,11 @@ type (
 		AddFormat   bool   `default:"true" toml:"addFormat"`
 	}
 
-	Read struct {
-	}
-
 	Sync struct {
 		SyncMessage string   `default:"New changes" toml:"syncMessage"`
 		SyncFiles   []string `default:"[]string{}" toml:"syncFiles"`
 		SyncAuth    bool     `default:"true" toml:"syncAuth"`
 		SyncPush    bool     `default:"false" toml:"syncPush"`
-	}
-
-	Link struct {
 	}
 
 	Edit struct {
