@@ -5,17 +5,25 @@ Doman is a personal project, please do not expect working code or it having the 
 # Building instructions
 
 **Requirements**
-
 - A machine running any linux distribution (Windows or MacOS will work too probably, I just never tested it)
 - Go
 - Git
+- Make
 
-When you meet the requirements, execute the following command:
-
+First clone the repository:
 ```shell
 git clone https://github.com/superNWHG/doman.git
-cd doman/cmd/doman
-go install
+cd doman
+```
+
+To build a doman binary, run:
+```shell
+make build
+```
+
+To install doman, run:
+```shell
+make install
 ```
 
 If you command doesn't work after installing, you may need to add the following to your shell config (for example .zshrc or .bashrc)
