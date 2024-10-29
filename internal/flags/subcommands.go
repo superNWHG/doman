@@ -63,8 +63,7 @@ type (
 )
 
 func getDefaults(path string) (*Defaults, error) {
-	defaults := Defaults{}
-	userDefaults, err := config.ReadConfigAny(path, &defaults)
+	userDefaults, err := config.ReadConfigAny(path, &Defaults{})
 	if err != nil {
 		if err.Error() == "Config file does not exist" {
 			return &Defaults{}, nil
