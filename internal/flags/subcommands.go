@@ -231,6 +231,16 @@ func SetSubcommands() error {
 			return err
 		}
 
+		if *configNew && *configRead {
+			err := errors.New("Only one flag allowed")
+			return err
+		}
+
+		if !*configNew && !*configRead {
+			err := errors.New("Expected flag")
+			return err
+		}
+
 		if *configNew {
 			if err := config.NewConfig(*path, Defaults{}); err != nil {
 				return err
