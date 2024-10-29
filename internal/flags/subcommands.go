@@ -66,7 +66,15 @@ func getDefaults(path string) (*Defaults, error) {
 	defaults := Defaults{}
 	userDefaults, err := config.ReadConfigAny(path, &defaults)
 	if err != nil {
+		if err.Error() == "Config file does not exist" {
+			return &Defaults{}, nil
+		}
 		return nil, err
+	}
+
+	if userDefaults == nil {
+		userDefaults = &Defaults{}
+		return userDefaults.(*Defaults), err
 	}
 
 	return userDefaults.(*Defaults), nil
@@ -76,10 +84,8 @@ func SetSubcommands() error {
 	path := pflag.String("path", "./", "Path to the repo")
 
 	defaults, err := getDefaults(*path)
-	if err != nil && err.Error() != "Config file does not exist" {
+	if err != nil {
 		return err
-	} else if err.Error() == "Config file does not exist" {
-		defaults = &Defaults{}
 	}
 
 	newRepoCmd := pflag.NewFlagSet("new", pflag.ExitOnError)
