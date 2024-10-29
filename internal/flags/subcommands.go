@@ -83,16 +83,16 @@ func SetSubcommands() error {
 	}
 
 	newRepoCmd := pflag.NewFlagSet("new", pflag.ExitOnError)
-	newRepoClone := newRepoCmd.Bool("clone", defaults.NewRepoClone, "Set to true to clone a repo instead of initializing a new one")
-	newRepoDataFile := newRepoCmd.Bool("datafile", defaults.NewRepoDataFile, "Set to false if you don't wat to create a data file to keep track of your dotfiles")
-	newRepoUrl := newRepoCmd.String("url", defaults.NewRepoUrl, "URL of the repo")
+	newRepoClone := newRepoCmd.Bool("clone", defaults.NewRepoClone, "Clone a repository instead of initializing a new one")
+	newRepoDataFile := newRepoCmd.Bool("datafile", defaults.NewRepoDataFile, "Don't create a data file to keep track of your dotfiles")
+	newRepoUrl := newRepoCmd.String("url", defaults.NewRepoUrl, "URL to the repository")
 
 	initCmd := pflag.NewFlagSet("init", pflag.ExitOnError)
 
 	addCmd := pflag.NewFlagSet("add", pflag.ExitOnError)
 	addName := addCmd.String("name", defaults.AddName, "Name of the dotfile entry")
 	addEntry := addCmd.String("entry", defaults.AddEntry, "Path to the new dotfile entry")
-	addExisting := addCmd.Bool("existing", defaults.AddExisting, "Set to true to add an existing file in your dotfiles directory")
+	addExisting := addCmd.Bool("existing", defaults.AddExisting, "Add an existing file in your dotfiles directory")
 	addFormat := addCmd.Bool("format", defaults.AddFormat, "Automatically format dotfiles.json")
 
 	readCmd := pflag.NewFlagSet("read", pflag.ExitOnError)
@@ -100,19 +100,19 @@ func SetSubcommands() error {
 	syncCmd := pflag.NewFlagSet("sync", pflag.ExitOnError)
 	syncMessage := syncCmd.String("message", defaults.SyncMessage, "Custom commit message")
 	syncFiles := syncCmd.StringSlice("files", defaults.SyncFiles, "Files you want to sync (leave empty to sync all)")
-	syncAuth := syncCmd.Bool("authentication", defaults.SyncAuth, "Set to false to not ask for username and password")
-	syncPush := syncCmd.Bool("push", defaults.SyncPush, "Set to true to automatically push to the remote repository")
+	syncAuth := syncCmd.Bool("authentication", defaults.SyncAuth, "Ask for username and password")
+	syncPush := syncCmd.Bool("push", defaults.SyncPush, "Automatically push to the remote repository")
 
 	linkCmd := pflag.NewFlagSet("link", pflag.ExitOnError)
 
 	editCmd := pflag.NewFlagSet("edit", pflag.ExitOnError)
 	editName := editCmd.String("name", defaults.EditName, "Name of the dotfile entry to edit")
-	editEditor := editCmd.String("editor", defaults.EditEditor, "Editor you want to use (leave empty to use default)")
+	editEditor := editCmd.String("editor", defaults.EditEditor, "Editor you want to use (leave empty to use $EDITOR)")
 	editFormat := editCmd.Bool("format", defaults.EditFormat, "Automatically format dotfiles.json")
 
 	configCmd := pflag.NewFlagSet("config", pflag.ExitOnError)
-	configNew := configCmd.Bool("new", defaults.ConfigNew, "Create a new config file")
-	configRead := configCmd.Bool("read", defaults.ConfigRead, "Read the config file")
+	configNew := configCmd.Bool("new", defaults.ConfigNew, "Create a new configuration file")
+	configRead := configCmd.Bool("read", defaults.ConfigRead, "Read the configuration file")
 
 	if len(os.Args) < 2 {
 		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
