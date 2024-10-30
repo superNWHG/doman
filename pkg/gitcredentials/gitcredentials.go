@@ -11,7 +11,7 @@ import (
 	"golang.org/x/term"
 )
 
-func GetGitCredentials() (error, string, string, string) {
+func AskGitCredentials() (error, string, string, string) {
 	fmt.Print("Name: ")
 	var name string
 	if _, err := fmt.Scan(&name); err != nil {
@@ -33,7 +33,7 @@ func GetGitCredentials() (error, string, string, string) {
 	return nil, name, mail, string(pass)
 }
 
-func GetGitCredentialHelper(url string) (string, string, string, error) {
+func GetGitCredentials(url string) (string, string, string, error) {
 	credentialFile := filepath.Join(os.Getenv("HOME"), ".git-credentials")
 
 	credentialContent, err := os.ReadFile(credentialFile)
