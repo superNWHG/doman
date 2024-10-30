@@ -16,6 +16,7 @@ type (
 		Sync    `toml:"Sync"`
 		Edit    `toml:"Edit"`
 		Config  `toml:"Config"`
+		Install `toml:"Install"`
 	}
 
 	NewRepo struct {
@@ -47,6 +48,11 @@ type (
 	Config struct {
 		ConfigNew  bool `default:"false" toml:"configNew"`
 		ConfigRead bool `default:"false" toml:"configRead"`
+	}
+
+	Install struct {
+		InstallOs    string   `default:"" toml:"os"`
+		InstallNames []string `default:"[]string{}" toml:"installNames"`
 	}
 )
 
@@ -101,6 +107,10 @@ func SetSubcommands() error {
 	configCmd := pflag.NewFlagSet("config", pflag.ExitOnError)
 	configNew := configCmd.Bool("new", defaults.ConfigNew, "Create a new configuration file")
 	configRead := configCmd.Bool("read", defaults.ConfigRead, "Read the configuration file")
+
+	installCmd := pflag.NewFlagSet("install", pflag.ExitOnError)
+	installOs := installCmd.String("os", defaults.InstallOs, "Specify the os")
+	installNames := installCmd.StringSlice("names", defaults.InstallNames, "Specify the names of the packages you want to install")
 
 	if len(os.Args) < 2 {
 		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
@@ -239,6 +249,15 @@ func SetSubcommands() error {
 			if err := readconfig(*path, &Defaults{}); err != nil {
 				return err
 			}
+		}
+
+	case "install":
+		if err := installCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+
+		if err := install(*path, *installNames, *installOs); err != nil {
+			return err
 		}
 
 		return nil
