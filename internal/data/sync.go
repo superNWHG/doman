@@ -28,7 +28,7 @@ func Sync(path string, message string, push bool, auth bool, filesToSync []strin
 
 	var name, pass, mail string
 	if auth {
-		err, name, mail, pass = gitcredentials.AskGitCredentials()
+		name, mail, pass, err = gitcredentials.AskGitCredentials()
 		if err != nil {
 			return err
 		}
