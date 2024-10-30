@@ -1,6 +1,7 @@
 package packages
 
 import (
+	"errors"
 	"os"
 	"os/exec"
 	"strings"
@@ -41,24 +42,36 @@ func install(p *packageManager, program string) error {
 	return nil
 }
 
-func Search(os string, query string) error {
+func Search(os string, query string) (string, error) {
 	switch os {
 	case "arch":
 		packages, err := search(&packageManager{Command: "pacman", searchFlag: "-Ssq"}, query)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		installPkg, err := fuzzyfinder.Find(packages, func(i int) string {
 			return packages[i]
 		})
 		if err != nil {
-			return err
+			return "", err
 		}
+		return packages[installPkg], nil
+	default:
+		err := errors.New("Unsupported OS")
+		return "", err
+	}
+}
 
-		if err := install(&packageManager{Command: "pacman", installFlag: "-S"}, packages[installPkg]); err != nil {
+func Install(os string, pkg string) error {
+	switch os {
+	case "arch":
+		if err := install(&packageManager{Command: "pacman", installFlag: "-S"}, pkg); err != nil {
 			return err
 		}
+	default:
+		err := errors.New("Unsupported OS")
+		return err
 	}
 
 	return nil
