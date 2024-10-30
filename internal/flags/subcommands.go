@@ -113,7 +113,7 @@ func SetSubcommands() error {
 	installNames := installCmd.StringSlice("names", defaults.InstallNames, "Specify the names of the packages you want to install")
 
 	if len(os.Args) < 2 {
-		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
+		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd)
 		err := errors.New("Expected subcommand")
 		return err
 	}
@@ -263,7 +263,7 @@ func SetSubcommands() error {
 		return nil
 	}
 
-	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd)
+	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd)
 	err = errors.New("Invalid subcommand")
 	return err
 }
