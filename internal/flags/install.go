@@ -31,9 +31,12 @@ func install(path string, installNames []string, os string) error {
 	}
 
 	for i := range installNames {
-		fmt.Print("Please select a package to install for ", installNames[i], "\nPress [ENTER] to continue")
+		fmt.Print("Optionally, you can specify a custom package name for ", installNames[i], " (leave empty to use default):")
 		var input string
 		fmt.Scanln(&input)
+		if input != "" {
+			installNames[i] = input
+		}
 		pkg, err := packages.Search(os, installNames[i])
 		if err != nil {
 			return err
