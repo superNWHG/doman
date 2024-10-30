@@ -3,6 +3,7 @@ package flags
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/superNWHG/doman/internal/data"
 	"github.com/superNWHG/doman/internal/packages"
@@ -17,6 +18,16 @@ func install(path string, installNames []string, os string) error {
 
 	if installNames == nil {
 		installNames = names
+
+		for i := range installNames {
+			if strings.Contains(installNames[i], "/") {
+				for x, character := range installNames[i] {
+					if string(character) == "/" {
+						installNames[i] = installNames[i][:x]
+					}
+				}
+			}
+		}
 	}
 
 	for i := range installNames {
