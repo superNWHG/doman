@@ -107,3 +107,17 @@ func Push(path string, name string, password string) error {
 
 	return nil
 }
+
+func GetRemote(path string) (string, error) {
+	repo, err := git.PlainOpen(path)
+	if err != nil {
+		return "", err
+	}
+
+	remotes, err := repo.Remotes()
+	if err != nil {
+		return "", err
+	}
+
+	return remotes[0].String(), nil
+}
