@@ -258,6 +258,8 @@ func SetSubcommands() error {
 			}
 		}
 
+		return nil
+
 	case "install":
 		if err := installCmd.Parse(os.Args[2:]); err != nil {
 			return err
