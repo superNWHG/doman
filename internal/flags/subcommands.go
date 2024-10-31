@@ -35,7 +35,8 @@ type (
 	Sync struct {
 		SyncMessage string   `default:"New changes" toml:"syncMessage"`
 		SyncFiles   []string `default:"[]string{}" toml:"syncFiles"`
-		SyncAuth    bool     `default:"true" toml:"syncAuth"`
+		SyncAuth    bool     `default:"false" toml:"syncAuth"`
+		SyncGitAuth bool     `default:"false" toml:"syncGitAuth"`
 		SyncPush    bool     `default:"false" toml:"syncPush"`
 	}
 
@@ -95,6 +96,7 @@ func SetSubcommands() error {
 	syncMessage := syncCmd.String("message", defaults.SyncMessage, "Custom commit message")
 	syncFiles := syncCmd.StringSlice("files", defaults.SyncFiles, "Files you want to sync (leave empty to sync all)")
 	syncAuth := syncCmd.Bool("authentication", defaults.SyncAuth, "Ask for username and password")
+	syncGitAuth := syncCmd.Bool("gitauthentication", defaults.SyncGitAuth, "Use local git credentials")
 	syncPush := syncCmd.Bool("push", defaults.SyncPush, "Automatically push to the remote repository")
 
 	linkCmd := pflag.NewFlagSet("link", pflag.ExitOnError)
@@ -191,7 +193,12 @@ func SetSubcommands() error {
 			return err
 		}
 
-		if err := data.Sync(*path, *syncMessage, *syncPush, *syncAuth, *syncFiles); err != nil {
+		if *syncAuth && *syncGitAuth {
+			err := errors.New("Only one authentication flag allowed")
+			return err
+		}
+
+		if err := data.Sync(*path, *syncMessage, *syncPush, *syncAuth, *syncGitAuth, *syncFiles); err != nil {
 			return err
 		}
 

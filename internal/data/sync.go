@@ -3,12 +3,15 @@ package data
 import (
 	"path/filepath"
 	"slices"
+	"strings"
 
 	"github.com/superNWHG/doman/internal/git"
 	"github.com/superNWHG/doman/pkg/gitcredentials"
 )
 
-func Sync(path string, message string, push bool, auth bool, filesToSync []string) error {
+func Sync(
+	path string, message string, push bool, auth bool, gitAuth bool, filesToSync []string,
+) error {
 	dataPath := filepath.Join(path, "dotfiles.json")
 	files, _, _, err := ReadDataFile(dataPath)
 	if err != nil {
@@ -29,6 +32,18 @@ func Sync(path string, message string, push bool, auth bool, filesToSync []strin
 	var name, pass, mail string
 	if auth {
 		name, mail, pass, err = gitcredentials.AskGitCredentials()
+		if err != nil {
+			return err
+		}
+	} else if gitAuth {
+		remote, err := git.GetRemote(path)
+		if err != nil {
+			return err
+		}
+
+		remote = strings.Split(remote, "https://")[1]
+		remote = strings.Split(remote, "/")[0]
+		name, mail, pass, err = gitcredentials.GetGitCredentials(remote)
 		if err != nil {
 			return err
 		}
