@@ -41,5 +41,6 @@ export PATH=$PATH:$HOME/go/bin
 - Sync configurations with the remote repository (`doman sync [flag(s)]`)
 - Symlink all files that are not symlinked already (`doman link [flag(s)]`)
 - Edit a dotfile entry with your preferred editor (`doman edit [flag(s)]`)
+- Install a package used in your dotfiles (`doman install [flag(s)]`)
 
 **For a list with also flags, run `doman` with no arguments**
