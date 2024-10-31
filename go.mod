@@ -5,6 +5,7 @@ go 1.23.1
 require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/go-git/go-git/v5 v5.12.0
+	github.com/ktr0731/go-fuzzyfinder v0.8.0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/term v0.18.0
 )
@@ -24,7 +25,6 @@ require (
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
 	github.com/ktr0731/go-ansisgr v0.1.0 // indirect
-	github.com/ktr0731/go-fuzzyfinder v0.8.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/nsf/termbox-go v1.1.1 // indirect
