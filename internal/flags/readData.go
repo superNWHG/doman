@@ -3,6 +3,7 @@ package flags
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/superNWHG/doman/internal/data"
 )
@@ -14,8 +15,16 @@ func readData(path string) error {
 		return err
 	}
 
-	for i := range values {
-		fmt.Println(values[i]+":", entries[values[i]])
+	longest := 0
+	for _, v := range values {
+		if len(v) > longest {
+			longest = len(v)
+		}
+	}
+
+	for i, v := range values {
+		diff := longest - len(v)
+		fmt.Println(values[i]+strings.Repeat(" ", diff)+":", entries[values[i]])
 	}
 
 	return nil
