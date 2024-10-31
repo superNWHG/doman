@@ -81,12 +81,11 @@ func SetSubcommands() error {
 		if strings.Contains(v, "path") {
 			if strings.Contains(v, "=") {
 				path = strings.Split(v, "=")[1]
+				os.Args = append(os.Args[:i], os.Args[i+1:]...)
 			} else {
-				i++
-				path = os.Args[i]
+				path = os.Args[i+1]
+				os.Args = append(os.Args[:i], os.Args[i+2:]...)
 			}
-
-			os.Args = append(os.Args[:i], os.Args[i+1:]...)
 			break
 		}
 		path = "./"
