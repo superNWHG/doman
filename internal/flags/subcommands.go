@@ -11,7 +11,7 @@ import (
 )
 
 type (
-	Defaults struct {
+	ConfigOptions struct {
 		NewRepo `toml:"NewRepo"`
 		Add     `toml:"Add"`
 		Sync    `toml:"Sync"`
@@ -63,16 +63,16 @@ type (
 	}
 )
 
-func getUserConfig(path string) (*Defaults, error) {
-	userDefaults, err := config.ReadConfig(path, &Defaults{})
+func getUserConfig(path string) (*ConfigOptions, error) {
+	userDefaults, err := config.ReadConfig(path, &ConfigOptions{})
 	if err != nil {
 		if err.Error() == "Config file does not exist" {
-			return &Defaults{}, nil
+			return &ConfigOptions{}, nil
 		}
 		return nil, err
 	}
 
-	return userDefaults.(*Defaults), nil
+	return userDefaults.(*ConfigOptions), nil
 }
 
 func SetSubcommands() error {
@@ -266,7 +266,7 @@ func SetSubcommands() error {
 		}
 
 		if *configNew {
-			if err := config.NewConfig(path, Defaults{}); err != nil {
+			if err := config.NewConfig(path, ConfigOptions{}); err != nil {
 				return err
 			}
 		}
