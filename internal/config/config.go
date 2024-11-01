@@ -26,28 +26,7 @@ func NewConfig(path string, configStruct interface{}) error {
 	return nil
 }
 
-func ReadConfig(path string, configStruct interface{}) (interface{}, error) {
-	path = filepath.Join(path, "config.toml")
-
-	if _, err := os.Stat(path); err != nil {
-		err := errors.New("Config file does not exist")
-		return nil, err
-	}
-
-	fileContent, err := os.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-
-	userConfig, err := decodeToml(fileContent, &configStruct)
-	if err != nil {
-		return nil, err
-	}
-
-	return userConfig, nil
-}
-
-func ReadConfigAny(path string, configStruct any) (any, error) {
+func ReadConfig(path string, configStruct any) (any, error) {
 	path = filepath.Join(path, "config.toml")
 
 	if _, err := os.Stat(path); err != nil {

@@ -63,8 +63,8 @@ type (
 	}
 )
 
-func getDefaults(path string) (*Defaults, error) {
-	userDefaults, err := config.ReadConfigAny(path, &Defaults{})
+func getUserConfig(path string) (*Defaults, error) {
+	userDefaults, err := config.ReadConfig(path, &Defaults{})
 	if err != nil {
 		if err.Error() == "Config file does not exist" {
 			return &Defaults{}, nil
@@ -91,7 +91,7 @@ func SetSubcommands() error {
 		path = "./"
 	}
 
-	defaults, err := getDefaults(path)
+	defaults, err := getUserConfig(path)
 	if err != nil {
 		return err
 	}
@@ -272,7 +272,7 @@ func SetSubcommands() error {
 		}
 
 		if *configRead {
-			if err := readconfig(path, &Defaults{}); err != nil {
+			if err := readConfig(path); err != nil {
 				return err
 			}
 		}
