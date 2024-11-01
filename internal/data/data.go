@@ -15,8 +15,7 @@ func NewDataFile(path string) error {
 	}
 	dataFilePath := filepath.Join(path, "dotfiles.json")
 	if _, err := os.Stat(dataFilePath); err == nil {
-		err := errors.New("Data file already exists")
-		return err
+		return errors.New("Data file already exists")
 	}
 
 	if _, err := os.Create(dataFilePath); err != nil {
@@ -88,8 +87,7 @@ func EditData(path string, name string, editor string, format bool) error {
 		if editorEnv := os.Getenv("EDITOR"); editorEnv != "" {
 			editor = editorEnv
 		} else {
-			err := errors.New("No editor found")
-			return err
+			return errors.New("No editor found")
 		}
 	}
 
@@ -100,8 +98,7 @@ func EditData(path string, name string, editor string, format bool) error {
 	}
 
 	if data[name] == nil {
-		err := errors.New("Name not found")
-		return err
+		return errors.New("Name not found")
 	}
 
 	nameData := map[string]interface{}{name: data[name]}

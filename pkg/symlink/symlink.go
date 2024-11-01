@@ -9,8 +9,7 @@ type method string
 
 func NewLink(oldPath []string, newPath []string, method method) error {
 	if method != "deleteOld" && method != "deleteNew" && method != "deleteOldDelete" {
-		err := errors.New("Invalid method")
-		return err
+		return errors.New("Invalid method")
 	}
 	switch method {
 	case "deleteOld":

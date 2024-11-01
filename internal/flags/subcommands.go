@@ -135,8 +135,7 @@ func SetSubcommands() error {
 
 	if len(os.Args) < 2 {
 		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd)
-		err := errors.New("Expected subcommand")
-		return err
+		return errors.New("Expected subcommand")
 	}
 
 	switch os.Args[1] {
@@ -146,8 +145,7 @@ func SetSubcommands() error {
 		}
 
 		if *newRepoUrl == "" {
-			err := errors.New("Url flag is required")
-			return err
+			return errors.New("Url flag is required")
 		}
 
 		if *newRepoClone {
@@ -180,8 +178,7 @@ func SetSubcommands() error {
 		}
 
 		if *addEntry == "" {
-			err := errors.New("Entry flag is required")
-			return err
+			return errors.New("Entry flag is required")
 		}
 
 		if *addExisting {
@@ -213,8 +210,7 @@ func SetSubcommands() error {
 		}
 
 		if *syncAuth && *syncGitAuth {
-			err := errors.New("Only one authentication flag allowed")
-			return err
+			return errors.New("Only one authentication flag allowed")
 		}
 
 		if err := data.Sync(path, *syncMessage, *syncPush, *syncAuth, *syncGitAuth, *syncFiles); err != nil {
@@ -240,8 +236,7 @@ func SetSubcommands() error {
 		}
 
 		if *editName == "" {
-			err := errors.New("Name flag is required")
-			return err
+			return errors.New("Name flag is required")
 		}
 
 		if err := data.EditData(path, *editName, *editEditor, *editFormat); err != nil {
@@ -256,13 +251,11 @@ func SetSubcommands() error {
 		}
 
 		if *configNew && *configRead {
-			err := errors.New("Only one flag allowed")
-			return err
+			return errors.New("Only one flag allowed")
 		}
 
 		if !*configNew && !*configRead {
-			err := errors.New("Expected flag")
-			return err
+			return errors.New("Expected flag")
 		}
 
 		if *configNew {
@@ -292,6 +285,5 @@ func SetSubcommands() error {
 	}
 
 	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd)
-	err = errors.New("Invalid subcommand")
-	return err
+	return errors.New("Invalid subcommand")
 }

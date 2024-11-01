@@ -19,8 +19,7 @@ func NewConfig(path string, configStruct interface{}) error {
 			return err
 		}
 	} else {
-		err := errors.New("Config file already exists")
-		return err
+		return errors.New("Config file already exists")
 	}
 
 	return nil
@@ -30,8 +29,7 @@ func ReadConfig(path string, configStruct any) (any, error) {
 	path = filepath.Join(path, "config.toml")
 
 	if _, err := os.Stat(path); err != nil {
-		err := errors.New("Config file does not exist")
-		return nil, err
+		return nil, errors.New("Config file does not exist")
 	}
 
 	fileContent, err := os.ReadFile(path)

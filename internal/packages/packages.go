@@ -58,8 +58,7 @@ func Search(os string, query string) (string, error) {
 		}
 		return packages[installPkg], nil
 	default:
-		err := errors.New("Unsupported OS")
-		return "", err
+		return "", errors.New("Unsupported OS")
 	}
 }
 
@@ -70,8 +69,7 @@ func Install(os string, pkg string) error {
 			return err
 		}
 	default:
-		err := errors.New("Unsupported OS")
-		return err
+		return errors.New("Unsupported OS")
 	}
 
 	return nil

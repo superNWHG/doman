@@ -53,8 +53,7 @@ func GetGitCredentials(url string) (string, string, string, error) {
 			return
 		}
 		if !strings.Contains(string(credentialContent), url) {
-			err := errors.New(url + " not in credential file")
-			error = err
+			error = errors.New(url + " not in credential file")
 			return
 		}
 
@@ -87,8 +86,7 @@ func GetGitCredentials(url string) (string, string, string, error) {
 			return
 		}
 		if !strings.Contains(string(gitconfigContent), "email = ") {
-			err := errors.New("email not in gitconfig file")
-			error = err
+			error = errors.New("email not in gitconfig file")
 			return
 		}
 
