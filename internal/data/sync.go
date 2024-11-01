@@ -18,12 +18,17 @@ func Sync(
 		return err
 	}
 
-	if len(filesToSync) == 0 {
+	if filesToSync == nil {
 		files = append(files, "dotfiles.json")
 	} else {
-		for i := range filesToSync {
+		for i := 0; i < len(filesToSync); i++ {
 			if !slices.Contains(files, filesToSync[i]) {
-				filesToSync = slices.Delete(filesToSync, i, i)
+				if i == len(filesToSync) {
+					filesToSync = filesToSync[:i]
+				} else {
+					filesToSync = append(filesToSync[:i], filesToSync[i+1:]...)
+					i--
+				}
 			}
 		}
 		files = filesToSync
