@@ -19,7 +19,7 @@ func Sync(
 	}
 
 	if filesToSync == nil {
-		files = append(files, "dotfiles.json")
+		files = append(files, "dotfiles.json", "config.toml")
 	} else {
 		for i := 0; i < len(filesToSync); i++ {
 			if !slices.Contains(files, filesToSync[i]) {
