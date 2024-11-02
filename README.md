@@ -1,27 +1,31 @@
 # Welcome to the doman repository!
 
-Doman is a personal project, please do not expect working code or it having the features you would expect although I use it myself.
+Doman is a dotfiles manager.
 
 # Building instructions
 
 **Requirements**
+
 - A machine running any linux distribution (Windows or MacOS will work too probably, I just never tested it)
 - Go
 - Git
 - Make
 
 First clone the repository:
+
 ```shell
 git clone https://github.com/superNWHG/doman.git
 cd doman
 ```
 
 To build a doman binary, run:
+
 ```shell
 make build
 ```
 
 To install doman, run:
+
 ```shell
 make install
 ```
