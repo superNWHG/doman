@@ -18,6 +18,7 @@ type (
 		Edit    `toml:"Edit"`
 		Config  `toml:"Config"`
 		Install `toml:"Install"`
+		Status  `toml:"Status"`
 	}
 
 	NewRepo struct {
@@ -60,6 +61,10 @@ type (
 		InstallOs    string   `default:"" toml:"os"`
 		InstallPath  string   `default:"./" toml:"installPath"`
 		InstallNames []string `default:"[]string{}" toml:"installNames"`
+	}
+
+	Status struct {
+		StatusPath string `default:"./" toml:"statusPath"`
 	}
 )
 
@@ -132,6 +137,8 @@ func SetSubcommands() error {
 	installCmd := pflag.NewFlagSet("install", pflag.ExitOnError)
 	installOs := installCmd.String("os", defaults.InstallOs, "Specify the os")
 	installNames := installCmd.StringSlice("names", defaults.InstallNames, "Specify the names of the packages you want to install")
+
+	statusCmd := pflag.NewFlagSet("status", pflag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd)
@@ -278,6 +285,17 @@ func SetSubcommands() error {
 		}
 
 		if err := install(path, *installNames, *installOs); err != nil {
+			return err
+		}
+
+		return nil
+
+	case "status":
+		if err := statusCmd.Parse(os.Args[2:]); err != nil {
+			return err
+		}
+
+		if err := getStatus(path); err != nil {
 			return err
 		}
 
