@@ -122,13 +122,20 @@ func GetRemote(path string) (string, error) {
 	return remotes[0].String(), nil
 }
 
-func Status(path string, files []string) []string {
-	var allFilesStatus []string
-	for _, v := range files {
-		fileStatus := git.Status{}
-		git.Status.File(fileStatus, v)
-		allFilesStatus = append(allFilesStatus, fileStatus.String())
+func Status(path string) (*git.Status, error) {
+	repo, err := git.PlainOpen(path)
+	if err != nil {
+		return nil, err
+	}
+	workTree, err := repo.Worktree()
+	if err != nil {
+		return nil, err
 	}
 
-	return allFilesStatus
+	status, err := workTree.Status()
+	if err != nil {
+		return nil, err
+	}
+
+	return &status, nil
 }
