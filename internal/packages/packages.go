@@ -10,13 +10,14 @@ import (
 )
 
 type packageManager struct {
-	Command     string
-	searchFlag  string
-	installFlag string
+	command          string
+	searchFlag       string
+	installFlag      string
+	abortErrorString string
 }
 
 func search(p *packageManager, query string) ([]string, error) {
-	cmd := exec.Command(p.Command, p.searchFlag, query)
+	cmd := exec.Command(p.command, p.searchFlag, query)
 
 	output, err := cmd.Output()
 	if err != nil {
@@ -30,12 +31,12 @@ func search(p *packageManager, query string) ([]string, error) {
 }
 
 func install(p *packageManager, program string) error {
-	cmd := exec.Command(p.Command, p.installFlag, program)
+	cmd := exec.Command(p.command, p.installFlag, program)
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	if err := cmd.Run(); err != nil && err.Error() != p.abortErrorString {
 		return err
 	}
 
@@ -47,12 +48,12 @@ func Search(os string, query string) (string, error) {
 	var err error
 	switch os {
 	case "arch":
-		packages, err = search(&packageManager{Command: "pacman", searchFlag: "-Ssq"}, query)
+		packages, err = search(&packageManager{command: "pacman", searchFlag: "-Ssq"}, query)
 		if err != nil {
 			return "", err
 		}
 	case "debian":
-		packages, err = search(&packageManager{Command: "apt-cache", searchFlag: "search"}, query)
+		packages, err = search(&packageManager{command: "apt-cache", searchFlag: "search"}, query)
 		if err != nil {
 			return "", err
 		}
@@ -72,11 +73,11 @@ func Search(os string, query string) (string, error) {
 func Install(os string, pkg string) error {
 	switch os {
 	case "arch":
-		if err := install(&packageManager{Command: "pacman", installFlag: "-S"}, pkg); err != nil {
+		if err := install(&packageManager{command: "pacman", installFlag: "-S", abortErrorString: "exit status 1"}, pkg); err != nil {
 			return err
 		}
 	case "debian":
-		if err := install(&packageManager{Command: "apt", installFlag: "install"}, pkg); err != nil {
+		if err := install(&packageManager{command: "apt", installFlag: "install", abortErrorString: "Abort."}, pkg); err != nil {
 			return err
 		}
 	default:
