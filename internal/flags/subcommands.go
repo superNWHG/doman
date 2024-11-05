@@ -18,27 +18,23 @@ type (
 		Edit    `toml:"Edit"`
 		Config  `toml:"Config"`
 		Install `toml:"Install"`
-		Status  `toml:"Status"`
 	}
 
 	NewRepo struct {
 		NewRepoClone    bool   `default:"false" toml:"newRepoClone"`
 		NewRepoDataFile bool   `default:"true" toml:"newRepoDataFile"`
 		NewRepoUrl      string `default:"" toml:"newRepoUrl"`
-		NewRepoPath     string `default:"./" toml:"path"`
 	}
 
 	Add struct {
 		AddName     string `default:"" toml:"addName"`
 		AddEntry    string `default:"" toml:"addEntry"`
-		AddPath     string `default:"./" toml:"addPath"`
 		AddExisting bool   `default:"false" toml:"addExisting"`
 		AddFormat   bool   `default:"true" toml:"addFormat"`
 	}
 
 	Sync struct {
 		SyncMessage string   `default:"New changes" toml:"syncMessage"`
-		SyncPath    string   `default:"./" toml:"syncPath"`
 		SyncFiles   []string `default:"[]string{}" toml:"syncFiles"`
 		SyncAuth    bool     `default:"false" toml:"syncAuth"`
 		SyncGitAuth bool     `default:"false" toml:"syncGitAuth"`
@@ -48,7 +44,6 @@ type (
 	Edit struct {
 		EditName   string `default:"" toml:"editName"`
 		EditEditor string `default:"" toml:"editEditor"`
-		EditPath   string `default:"./" toml:"editPath"`
 		EditFormat bool   `default:"true" toml:"editFormat"`
 	}
 
@@ -59,12 +54,10 @@ type (
 
 	Install struct {
 		InstallOs    string   `default:"" toml:"os"`
-		InstallPath  string   `default:"./" toml:"installPath"`
 		InstallNames []string `default:"[]string{}" toml:"installNames"`
 	}
 
 	Status struct {
-		StatusPath string `default:"./" toml:"statusPath"`
 	}
 )
 
