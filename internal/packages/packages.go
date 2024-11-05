@@ -43,29 +43,40 @@ func install(p *packageManager, program string) error {
 }
 
 func Search(os string, query string) (string, error) {
+	var packages []string
+	var err error
 	switch os {
 	case "arch":
-		packages, err := search(&packageManager{Command: "pacman", searchFlag: "-Ssq"}, query)
+		packages, err = search(&packageManager{Command: "pacman", searchFlag: "-Ssq"}, query)
 		if err != nil {
 			return "", err
 		}
-
-		installPkg, err := fuzzyfinder.Find(packages, func(i int) string {
-			return packages[i]
-		})
-		if err != nil && err.Error() != "abort" {
+	case "debian":
+		packages, err = search(&packageManager{Command: "apt-cache", searchFlag: "search"}, query)
+		if err != nil {
 			return "", err
 		}
-		return packages[installPkg], nil
 	default:
 		return "", errors.New("Unsupported OS")
 	}
+
+	installPkg, err := fuzzyfinder.Find(packages, func(i int) string {
+		return packages[i]
+	})
+	if err != nil && err.Error() != "abort" {
+		return "", err
+	}
+	return packages[installPkg], nil
 }
 
 func Install(os string, pkg string) error {
 	switch os {
 	case "arch":
 		if err := install(&packageManager{Command: "pacman", installFlag: "-S"}, pkg); err != nil {
+			return err
+		}
+	case "debian":
+		if err := install(&packageManager{Command: "apt", installFlag: "install"}, pkg); err != nil {
 			return err
 		}
 	default:
