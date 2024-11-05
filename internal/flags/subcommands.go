@@ -134,7 +134,7 @@ func SetSubcommands() error {
 	statusCmd := pflag.NewFlagSet("status", pflag.ExitOnError)
 
 	if len(os.Args) < 2 {
-		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd)
+		getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd, *statusCmd)
 		return errors.New("Expected subcommand")
 	}
 
@@ -295,6 +295,6 @@ func SetSubcommands() error {
 		return nil
 	}
 
-	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd)
+	getHelp(*newRepoCmd, *initCmd, *addCmd, *readCmd, *syncCmd, *linkCmd, *editCmd, *configCmd, *installCmd, *statusCmd)
 	return errors.New("Invalid subcommand")
 }

@@ -16,6 +16,7 @@ func getHelp(
 	edit pflag.FlagSet,
 	config pflag.FlagSet,
 	install pflag.FlagSet,
+	status pflag.FlagSet,
 ) {
 	fmt.Println("doman is a tool to manage your dotfiles")
 	fmt.Println("\nUsage:")
@@ -39,4 +40,6 @@ func getHelp(
 	config.PrintDefaults()
 	fmt.Println("\n install - Install a package used in your dotfiles")
 	install.PrintDefaults()
+	fmt.Println("\n status - Get the git status of your dotfiles")
+	status.PrintDefaults()
 }
