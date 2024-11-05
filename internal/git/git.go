@@ -121,3 +121,14 @@ func GetRemote(path string) (string, error) {
 
 	return remotes[0].String(), nil
 }
+
+func Status(path string, files []string) []string {
+	var allFilesStatus []string
+	for _, v := range files {
+		fileStatus := git.Status{}
+		git.Status.File(fileStatus, v)
+		allFilesStatus = append(allFilesStatus, fileStatus.String())
+	}
+
+	return allFilesStatus
+}
