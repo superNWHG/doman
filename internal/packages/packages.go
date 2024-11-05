@@ -53,7 +53,7 @@ func Search(os string, query string) (string, error) {
 		installPkg, err := fuzzyfinder.Find(packages, func(i int) string {
 			return packages[i]
 		})
-		if err != nil {
+		if err != nil && err.Error() != "abort" {
 			return "", err
 		}
 		return packages[installPkg], nil
