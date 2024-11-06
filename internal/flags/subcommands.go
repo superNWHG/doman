@@ -53,8 +53,9 @@ type (
 	}
 
 	Install struct {
-		InstallOs    string   `default:"" toml:"os"`
-		InstallNames []string `default:"[]string{}" toml:"installNames"`
+		InstallOs       string   `default:"" toml:"os"`
+		InstallNames    []string `default:"[]string{}" toml:"installNames"`
+		InstallLastPart bool     `default:"[]string{}" toml:"installLastPart"`
 	}
 
 	Status struct {
@@ -130,6 +131,7 @@ func SetSubcommands() error {
 	installCmd := pflag.NewFlagSet("install", pflag.ExitOnError)
 	installOs := installCmd.String("os", defaults.InstallOs, "Specify the os")
 	installNames := installCmd.StringSlice("names", defaults.InstallNames, "Specify the names of the packages you want to install")
+	installLastPart := installCmd.Bool("lastpart", defaults.InstallLastPart, "Use last part of the path as default package name")
 
 	statusCmd := pflag.NewFlagSet("status", pflag.ExitOnError)
 
@@ -277,7 +279,7 @@ func SetSubcommands() error {
 			return err
 		}
 
-		if err := install(path, *installNames, *installOs); err != nil {
+		if err := install(path, *installNames, *installOs, *installLastPart); err != nil {
 			return err
 		}
 

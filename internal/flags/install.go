@@ -9,7 +9,7 @@ import (
 	"github.com/superNWHG/doman/internal/packages"
 )
 
-func install(path string, installNames []string, os string) error {
+func install(path string, installNames []string, os string, lastPathPart bool) error {
 	path = filepath.Join(path, "dotfiles.json")
 	names, _, _, err := data.ReadDataFile(path)
 	if err != nil {
@@ -21,9 +21,18 @@ func install(path string, installNames []string, os string) error {
 
 		for i := range installNames {
 			if strings.Contains(installNames[i], "/") {
-				for x, character := range installNames[i] {
-					if string(character) == "/" {
-						installNames[i] = installNames[i][:x]
+				if lastPathPart {
+					for x := len(installNames[i]) - 1; x >= 0; x-- {
+						if string(installNames[i][x]) == "/" {
+							installNames[i] = installNames[i][x+1:]
+							break
+						}
+					}
+				} else {
+					for x, character := range installNames[i] {
+						if string(character) == "/" {
+							installNames[i] = installNames[i][:x]
+						}
 					}
 				}
 			}
