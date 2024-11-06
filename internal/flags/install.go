@@ -36,22 +36,19 @@ func install(path string, installNames []string, os string, lastPathPart bool) e
 					}
 				}
 			}
-		}
-	}
-
-	for i := range installNames {
-		fmt.Print("Optionally, you can specify a custom package name for ", installNames[i], " (leave empty to use default):")
-		var input string
-		fmt.Scanln(&input)
-		if input != "" {
-			installNames[i] = input
-		}
-		pkg, err := packages.Search(os, installNames[i])
-		if err != nil {
-			return err
-		}
-		if err := packages.Install(os, pkg); err != nil {
-			return err
+			fmt.Print("Optionally, you can specify a custom package name for ", installNames[i], " (leave empty to use default):")
+			var input string
+			fmt.Scanln(&input)
+			if input != "" {
+				installNames[i] = input
+			}
+			pkg, err := packages.Search(os, installNames[i])
+			if err != nil {
+				return err
+			}
+			if err := packages.Install(os, pkg); err != nil {
+				return err
+			}
 		}
 	}
 
