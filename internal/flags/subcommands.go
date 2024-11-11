@@ -57,9 +57,6 @@ type (
 		InstallNames    []string `default:"[]string{}" toml:"installNames"`
 		InstallLastPart bool     `default:"[]string{}" toml:"installLastPart"`
 	}
-
-	Status struct {
-	}
 )
 
 func getUserConfig(path string) (*ConfigOptions, error) {
