@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
+	"regexp"
 	"sync"
 	"syscall"
 
@@ -48,29 +48,14 @@ func GetGitCredentials(gitUrl string) (name string, mail string, password string
 			error = err
 			return
 		}
-		if !strings.Contains(string(credentialContent), gitUrl) {
-			error = errors.New(gitUrl + " not in credential file")
+
+		rg := regexp.MustCompile("https?://(.+):(.+)@" + gitUrl)
+		if credSlice := rg.FindAllStringSubmatch(string(credentialContent), -1)[0]; len(credSlice) < 3 {
+			error = errors.New("Could not find username and password in credential file")
 			return
-		}
-
-		credentials := strings.Split(string(credentialContent), "\n")
-
-		var urlCredential string
-		for i := range credentials {
-			if strings.Contains(credentials[i], gitUrl) {
-				urlCredential = string(credentials[i])
-				break
-			}
-		}
-
-		noUrl := strings.Replace(urlCredential, "https://", "", -1)
-		noUrl = strings.Replace(noUrl, "@"+gitUrl, "", -1)
-
-		for i, v := range noUrl {
-			if string(v) == ":" {
-				name = noUrl[:i]
-				password = noUrl[i+1:]
-			}
+		} else {
+			name = credSlice[1]
+			password = credSlice[2]
 		}
 	}()
 
@@ -81,27 +66,20 @@ func GetGitCredentials(gitUrl string) (name string, mail string, password string
 			error = err
 			return
 		}
-		if !strings.Contains(string(gitconfigContent), "email = ") {
-			error = errors.New("email not in gitconfig file")
-			return
-		}
 
-		gitConfigLines := strings.Split(string(gitconfigContent), "\n")
-		for i := range gitConfigLines {
-			if strings.Contains(gitConfigLines[i], "email = ") {
-				for j, v := range gitConfigLines[i] {
-					if string(v) == "=" {
-						mail = gitConfigLines[i][j+2:]
-					}
-				}
-			}
+		rg := regexp.MustCompile("email ?= ?(.+)")
+		if mailSlice := rg.FindAllStringSubmatch(string(gitconfigContent), -1)[0]; len(mailSlice) < 2 {
+			error = errors.New("Could not find email in gitconfig file")
+			return
+		} else {
+			mail = mailSlice[1]
 		}
 	}()
 
 	wg.Wait()
 	if error != nil {
-		return "", "", "", error
+		return
 	}
 
-	return name, mail, password, nil
+	return
 }
