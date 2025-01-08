@@ -12,6 +12,12 @@ import (
 	"golang.org/x/term"
 )
 
+var (
+	HomeDir, _            = os.UserHomeDir()
+	GitCredentialFileName = ".git-credentials"
+	GitConfigFileName     = ".gitconfig"
+)
+
 func AskGitCredentials() (name string, mail string, pass string, err error) {
 	fmt.Print("Name: ")
 	if _, err = fmt.Scan(&name); err != nil {
@@ -23,7 +29,7 @@ func AskGitCredentials() (name string, mail string, pass string, err error) {
 		return
 	}
 
-	fmt.Print("Password:")
+	fmt.Print("Password: ")
 	bytePass, err := term.ReadPassword(syscall.Stdin)
 	if err != nil {
 		return
@@ -34,11 +40,10 @@ func AskGitCredentials() (name string, mail string, pass string, err error) {
 }
 
 func GetGitCredentials(gitUrl string) (name string, mail string, password string, error error) {
-	credentialFile := filepath.Join(os.Getenv("HOME"), ".git-credentials")
-	gitconfigFile := filepath.Join(os.Getenv("HOME"), ".gitconfig")
+	credentialFile := filepath.Join(HomeDir, GitCredentialFileName)
+	gitconfigFile := filepath.Join(HomeDir, GitConfigFileName)
 
 	var wg sync.WaitGroup
-
 	wg.Add(2)
 
 	go func() {
