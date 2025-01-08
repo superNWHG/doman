@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 
 	"github.com/superNWHG/doman/internal/data"
-	"github.com/superNWHG/doman/pkg/symlink"
+	"github.com/superNWHG/doman/internal/symlink"
 )
 
 func addData(path string, name string, newPath string, format bool) error {

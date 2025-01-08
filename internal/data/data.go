@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/superNWHG/doman/pkg/symlink"
+	"github.com/superNWHG/doman/internal/symlink"
 )
 
 func NewDataFile(path string) error {
