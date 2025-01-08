@@ -5,12 +5,9 @@ import (
 	"os"
 )
 
-type method string
+type Method string
 
-func NewLink(oldPath []string, newPath []string, method method) error {
-	if method != "deleteOld" && method != "deleteNew" && method != "deleteOldDelete" {
-		return errors.New("Invalid method")
-	}
+func NewLink(oldPath []string, newPath []string, method Method) error {
 	switch method {
 	case "deleteOld":
 		for i := range oldPath {
@@ -30,6 +27,8 @@ func NewLink(oldPath []string, newPath []string, method method) error {
 				return err
 			}
 		}
+	default:
+		return errors.New("Invalid method")
 	}
 
 	for i := range oldPath {

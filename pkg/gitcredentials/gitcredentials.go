@@ -12,34 +12,30 @@ import (
 	"golang.org/x/term"
 )
 
-func AskGitCredentials() (string, string, string, error) {
+func AskGitCredentials() (name string, mail string, pass string, err error) {
 	fmt.Print("Name: ")
-	var name string
-	if _, err := fmt.Scan(&name); err != nil {
-		return "", "", "", err
+	if _, err = fmt.Scan(&name); err != nil {
+		return
 	}
 
 	fmt.Print("Email: ")
-	var mail string
-	if _, err := fmt.Scan(&mail); err != nil {
-		return "", "", "", err
+	if _, err = fmt.Scan(&mail); err != nil {
+		return
 	}
 
 	fmt.Print("Password:")
-	pass, err := term.ReadPassword(syscall.Stdin)
+	bytePass, err := term.ReadPassword(syscall.Stdin)
 	if err != nil {
-		return "", "", "", err
+		return
 	}
+	pass = string(bytePass)
 
-	return name, mail, string(pass), nil
+	return
 }
 
-func GetGitCredentials(url string) (string, string, string, error) {
+func GetGitCredentials(gitUrl string) (name string, mail string, password string, error error) {
 	credentialFile := filepath.Join(os.Getenv("HOME"), ".git-credentials")
 	gitconfigFile := filepath.Join(os.Getenv("HOME"), ".gitconfig")
-
-	var name, password, mail string
-	var error error
 
 	var wg sync.WaitGroup
 
@@ -52,8 +48,8 @@ func GetGitCredentials(url string) (string, string, string, error) {
 			error = err
 			return
 		}
-		if !strings.Contains(string(credentialContent), url) {
-			error = errors.New(url + " not in credential file")
+		if !strings.Contains(string(credentialContent), gitUrl) {
+			error = errors.New(gitUrl + " not in credential file")
 			return
 		}
 
@@ -61,14 +57,14 @@ func GetGitCredentials(url string) (string, string, string, error) {
 
 		var urlCredential string
 		for i := range credentials {
-			if strings.Contains(credentials[i], url) {
+			if strings.Contains(credentials[i], gitUrl) {
 				urlCredential = string(credentials[i])
 				break
 			}
 		}
 
 		noUrl := strings.Replace(urlCredential, "https://", "", -1)
-		noUrl = strings.Replace(noUrl, "@"+url, "", -1)
+		noUrl = strings.Replace(noUrl, "@"+gitUrl, "", -1)
 
 		for i, v := range noUrl {
 			if string(v) == ":" {
